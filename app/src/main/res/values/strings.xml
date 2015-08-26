@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MyApp</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="test_tv">A</string>
+    <string name="home_tab_tv">Home</string>
+    <string name="mark_tab_tv">Mark</string>
+    <string name="search_tab_tv">Search</string>
+    <string name="me_tab_tv">Me</string>
+
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+</resources>
