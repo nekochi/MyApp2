@@ -38,7 +38,7 @@
 
         </activity>
         <activity android:name=".activity.InitActivity"
-            android:label="Init">
+            android:label="Manga">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

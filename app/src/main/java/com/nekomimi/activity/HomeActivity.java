@@ -13,6 +13,7 @@ import com.nekomimi.view.TopTabView.OnSelectedListener;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -43,16 +44,17 @@ public class HomeActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 		toolbar = (Toolbar)findViewById(R.id.toolbar);
-		toolbar.setTitleTextColor(Color.WHITE);
+//		toolbar.setTitleTextColor(Color.WHITE);
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		mTabLayout = (TabLayout)findViewById(R.id.toptab);
+
 		mDrawerLayout = (DrawerLayout)findViewById(R.id.drawerLayout);
 		mActionBarDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout,toolbar,R.string.open,R.string.close);
 		mActionBarDrawerToggle.syncState();
 		mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
-		LinearLayout mNavTab = (LinearLayout)findViewById(R.id.navtab);
+		NavigationView mNavTab = (NavigationView)findViewById(R.id.nav_view);
 		mNavTab.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View view, MotionEvent motionEvent) {

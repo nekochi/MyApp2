@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.nekomimi.R;
+import com.nekomimi.base.AppConfig;
+import com.nekomimi.util.Util;
 
 /**
  * A login screen that offers login via email/password.
@@ -59,8 +61,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         setContentView(R.layout.activity_login);
 
         // Set up the login form.
-        mAccountView = (AutoCompleteTextView) findViewById(R.id.email);
-//        populateAutoComplete();
+        mAccountView = (AutoCompleteTextView) findViewById(R.id.account);
+        mAccountView.setThreshold(1);
+        populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -74,7 +77,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        mSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        mSignInButton = (Button) findViewById(R.id.sign_in_button);
         mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,7 +91,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private void populateAutoComplete() {
-        getLoaderManager().initLoader(0, null, this);
+//        getLoaderManager().initLoader(0, null, this);
+        AppConfig appConfig = AppConfig.getInstance();
+        addAccountToAutoComplete(Util.parseAccount(appConfig.get(AppConfig.ACCOUNT)));
     }
 
 
@@ -107,21 +112,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mAccountView.getText().toString();
+        String account = mAccountView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (TextUtils.isEmpty(password) || !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
+
             cancel = true;
         }
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
+        if (TextUtils.isEmpty(account) || !isAccountValid(account)) {
             mAccountView.setError(getString(R.string.error_field_required));
             focusView = mAccountView;
             cancel = true;
@@ -135,12 +141,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(account, password);
             mAuthTask.execute((Void) null);
         }
     }
 
-
+    private boolean isAccountValid(String account) {
+        //TODO: Replace this with your own logic
+        return account.length() > 4;
+    }
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
@@ -185,6 +194,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+
         return new CursorLoader(this);
     }
 
@@ -197,7 +207,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cursor.moveToNext();
         }
 
-        addEmailsToAutoComplete(emails);
+        addAccountToAutoComplete(emails);
     }
 
     @Override
@@ -216,11 +226,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
 
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
+    private void addAccountToAutoComplete(List<String> accountCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<String>(LoginActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
+                        android.R.layout.simple_dropdown_item_1line, accountCollection);
 
         mAccountView.setAdapter(adapter);
     }
@@ -231,11 +241,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String mEmail;
+        private final String mAccount;
         private final String mPassword;
 
         UserLoginTask(String email, String password) {
-            mEmail = email;
+            mAccount = email;
             mPassword = password;
         }
 
@@ -252,7 +262,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
+                if (pieces[0].equals(mAccount)) {
                     // Account exists, return true if the password matches.
                     return pieces[1].equals(mPassword);
                 }
@@ -268,6 +278,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //            showProgress(false);
 
             if (success) {
+                AppConfig appConfig = AppConfig.getInstance();
+                String str = appConfig.get(AppConfig.ACCOUNT);
+                appConfig.set(AppConfig.ACCOUNT, Util.addAccount(str, mAccount));
                 Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
                 startActivity(intent);
                 finish();

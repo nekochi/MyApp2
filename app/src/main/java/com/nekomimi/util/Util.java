@@ -4,6 +4,8 @@ import android.text.TextUtils;
 
 import com.nekomimi.base.AppConfig;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -101,4 +103,25 @@ public class Util {
         }
         return str;
     }
+
+    public static String makeHtml(String url,Map<String,String> map,String encode) {
+        if (map.isEmpty())
+        {
+            return url;
+        }
+        StringBuffer urlResult = new StringBuffer();
+        try {
+            urlResult.append(url).append("?");
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                urlResult.append(entry.getKey()).append("=").append(URLEncoder.encode(entry.getValue(), encode)).append("&");
+            }
+            urlResult.deleteCharAt(urlResult.length() - 1);
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
+        }
+        return urlResult.toString();
+    }
+
 }

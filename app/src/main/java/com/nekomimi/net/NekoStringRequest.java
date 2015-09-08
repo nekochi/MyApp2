@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
@@ -45,7 +46,10 @@ public class NekoStringRequest extends StringRequest
 
         }
     };
-
+    public static NekoStringRequest create(String url,Handler handler)
+    {
+        return create(Method.GET,url,handler,null);
+    }
     public static NekoStringRequest create(int method, String url,Handler handler,Map<String,String>map)
     {
         return new NekoStringRequest(method,url,mListener,mErrorListener,handler,map);

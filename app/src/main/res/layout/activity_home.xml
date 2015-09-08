@@ -26,6 +26,8 @@
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
             <android.support.design.widget.TabLayout
                 android:id="@+id/toptab"
+                app:tabIndicatorColor="@color/WHITE"
+                app:tabIndicatorHeight="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </android.support.design.widget.AppBarLayout>
@@ -37,19 +39,12 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
     </android.support.design.widget.CoordinatorLayout>
 
-    <LinearLayout
-        android:id="@+id/navtab"
-        android:layout_width="250dp"
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="?attr/colorPrimary"
-        android:orientation="vertical">
+        android:fitsSystemWindows="true"
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="500dp"
-            android:text="TEXT"
-            android:textColor="@color/WHITE" />
-    </LinearLayout>
+        app:menu="@menu/drawer" />
 </android.support.v4.widget.DrawerLayout>

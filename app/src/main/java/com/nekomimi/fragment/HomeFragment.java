@@ -60,7 +60,7 @@ public class HomeFragment extends Fragment
              @Override
              public boolean onTouch(View view, MotionEvent motionEvent) {
                  Log.d("where", "onTouch");
-                 VolleyConnect.getInstance().connect(NekoStringRequest.create(Request.Method.GET, "http://api.hitokoto.us/rand?cat=a", mHandle, null));
+                 VolleyConnect.getInstance().connect(NekoStringRequest.create("http://api.hitokoto.us/rand?cat=a", mHandle));
                  VolleyConnect.getInstance().getImg(mTestIv, "http://img2.myhsw.cn/2015-08-28/k9xkbx59.jpg");
 
 //                 new HttpConnectNet().execute("http://www.baidu.com");
