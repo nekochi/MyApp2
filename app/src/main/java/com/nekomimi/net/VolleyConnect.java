@@ -1,17 +1,17 @@
 package com.nekomimi.net;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.util.Log;
 import android.widget.ImageView;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.nekomimi.R;
+import com.nekomimi.base.NImageCache;
+import com.nekomimi.base.NekoApplication;
+
+
+
 
 /**
  * Created by hongchi on 2015-8-21.
@@ -20,37 +20,45 @@ public class VolleyConnect {
 
     public static final String HOST = "http://www.baidu.com";
 
-
-    public static void connect(Context context)
-    {
-        RequestQueue mQueue = Volley.newRequestQueue(context);
-        NekoStringRequest stringRequest = new NekoStringRequest(Request.Method.GET, HOST , new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-                Log.d("TAG",s);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Log.e("ERROR",volleyError.getMessage());
-            }
-        });
-        mQueue.add(stringRequest);
+    private Context mContext;
+    private RequestQueue mQueue;
+    private static VolleyConnect mVolleyConnect;
+    public static VolleyConnect getInstance() {
+        if (mVolleyConnect == null)
+        {
+            mVolleyConnect = new VolleyConnect();
+            mVolleyConnect.mContext = NekoApplication.getInstance();
+            mVolleyConnect.mQueue = Volley.newRequestQueue(mVolleyConnect.mContext);
+        }
+        return mVolleyConnect;
     }
 
-    public static void getImg(ImageView imageView,Context context)
+    public  void connect()
     {
-        RequestQueue mQueue = Volley.newRequestQueue(context);
-        ImageLoader imageLoader = new ImageLoader(mQueue, new ImageLoader.ImageCache() {
-            @Override
-            public Bitmap getBitmap(String s) {
-                return null;
-            }
+//        connect(HOST);
+    }
+    public  void connect(Request request)
+    {
+//        NekoStringRequest stringRequest = new NekoStringRequest(Request.Method.GET, url ,new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String s) {
+//              System.out.println(s);
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError volleyError) {
+//                Log.e("ERROR",volleyError.getMessage(),volleyError);
+//
+//            }
+//        });
+//        stringRequest.setRequestProperty("apikey","31079c31653c3d102a92cebdda04c267");
+        mQueue.add(request);
+    }
 
-            @Override
-            public void putBitmap(String s, Bitmap bitmap) {
-
-            }
-        });
+    public  void getImg(ImageView imageView,String url)
+    {
+        ImageLoader imageLoader = new ImageLoader(mQueue, NImageCache.getInstance());
+        ImageLoader.ImageListener listener = ImageLoader.getImageListener(imageView,R.drawable.ic_ab_drawer,R.drawable.ic_launcher);
+        imageLoader.get(url,listener);
     }
 }

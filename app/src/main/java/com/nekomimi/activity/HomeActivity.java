@@ -13,6 +13,7 @@ import com.nekomimi.view.TopTabView.OnSelectedListener;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -30,12 +31,12 @@ import android.widget.LinearLayout;
 
 public class HomeActivity extends AppCompatActivity {
 
-	private TopTabView mTopTab = null;
 	private ViewPager mViewPager = null;
 	private ArrayList<Fragment> mFragmentList;
 	private ActionBarDrawerToggle mActionBarDrawerToggle;
 	private Toolbar toolbar;
 	private DrawerLayout mDrawerLayout;
+	private TabLayout mTabLayout;
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -44,7 +45,8 @@ public class HomeActivity extends AppCompatActivity {
 		toolbar = (Toolbar)findViewById(R.id.toolbar);
 		toolbar.setTitleTextColor(Color.WHITE);
 		setSupportActionBar(toolbar);
-
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		mTabLayout = (TabLayout)findViewById(R.id.toptab);
 		mDrawerLayout = (DrawerLayout)findViewById(R.id.drawerLayout);
 		mActionBarDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout,toolbar,R.string.open,R.string.close);
 		mActionBarDrawerToggle.syncState();
@@ -59,7 +61,7 @@ public class HomeActivity extends AppCompatActivity {
 			}
 		});
 
-		mTopTab = (TopTabView)findViewById(R.id.toptab);
+		//mTopTab = (TopTabView)findViewById(R.id.toptab);
 		mViewPager = (ViewPager)findViewById(R.id.vp_pager);
 		HomeFragment fragment1 = new HomeFragment();
 //		TestFragment fragment1 = new TestFragment("#FF0000");
@@ -71,18 +73,13 @@ public class HomeActivity extends AppCompatActivity {
 		mFragmentList.add(fragment2);
 		mFragmentList.add(fragment3);
 		mFragmentList.add(fragment4);
-		MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),mFragmentList);
+		MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
+		adapter.addFrag(mFragmentList.get(0),"Home");
+		adapter.addFrag(mFragmentList.get(1),"Search");
+		adapter.addFrag(mFragmentList.get(2),"Star");
+		adapter.addFrag(mFragmentList.get(3),"Me");
 		mViewPager.setAdapter(adapter);
-		mViewPager.setCurrentItem(0);
-		mViewPager.setOnPageChangeListener(new MyOnPageChangeListener());
-		mTopTab.setOnSelectedListener(new OnSelectedListener()
-		{
-			@Override
-			public void onSelectedChange(int arg0) {
-				// TODO Auto-generated method stub
-				mViewPager.setCurrentItem(arg0-1);
-			}
-		});
+		mTabLayout.setupWithViewPager(mViewPager);
 	}
 	
 	public class MyOnPageChangeListener implements OnPageChangeListener
@@ -104,7 +101,7 @@ public class HomeActivity extends AppCompatActivity {
 		public void onPageSelected(int arg0) {
 			// TODO Auto-generated method stub
 			Log.d("where", "onPageSelected");
-			mTopTab.setSelect(arg0+1);
+
 		}
 	}
 

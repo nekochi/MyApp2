@@ -1,6 +1,7 @@
 package com.nekomimi.adapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,16 +9,16 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter 
 {
-	ArrayList<Fragment> mFragments;
+	private final List<Fragment> mFragments = new ArrayList<> ();
+	private final List<String> mFragmentTitles = new ArrayList<>();
 	public MyFragmentPagerAdapter(FragmentManager fm) {
 		super(fm);
 		// TODO Auto-generated constructor stub
 	}
 
-	public MyFragmentPagerAdapter(FragmentManager fm , ArrayList<Fragment> fragmentList)
-	{
-		super(fm);
-		mFragments = fragmentList;
+	public void addFrag(Fragment fragment, String title) {
+		mFragments.add(fragment);
+		mFragmentTitles.add(title);
 	}
 	
 	@Override
@@ -32,4 +33,9 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter
 		return mFragments.size();
 	}
 
+	@Override
+	public CharSequence getPageTitle(int position)
+	{
+		return mFragmentTitles.get(position);
+	}
 }

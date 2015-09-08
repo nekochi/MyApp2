@@ -9,6 +9,7 @@
     <string name="mark_tab_tv">Mark</string>
     <string name="search_tab_tv">Search</string>
     <string name="me_tab_tv">Me</string>
+    <string name="hello_blank_fragment">Hello</string>
 
     <string name="open">Open</string>
     <string name="close">Close</string>
