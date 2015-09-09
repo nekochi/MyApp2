@@ -1,25 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/view_card_manga"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/view_card_manga"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp">
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardCornerRadius="8dp"
-        android:layout_margin="8dp"
-        android:orientation="horizontal"
-        >
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_mangatitle"/>
+        android:layout_margin="8dp">
         <ImageView
             android:id="@+id/iv_face"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+        <TextView
+            android:id="@+id/tv_mangatitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/iv_face"
+            android:layout_marginLeft="8dp"
+            android:textSize="20sp"
+            android:textColor="#000000"
+            android:text="Title"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_mangatype"
+            android:layout_below="@id/tv_mangatitle"
+            android:text="Type"
+            android:layout_toRightOf="@id/iv_face"
             android:layout_margin="8dp"
-            android:layout_centerInParent="true"
-            android:scaleType="centerCrop">
-        </ImageView>
-    </android.support.v7.widget.CardView>
+            android:textColor="#000000"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_mangaarea"
+            android:layout_below="@id/tv_mangatitle"
+            android:text="Area"
+            android:layout_toRightOf="@id/tv_mangatype"
+            android:layout_margin="8dp"
+            android:textColor="#000000"/>
+    </RelativeLayout>
+
+
+
+
+</android.support.v7.widget.CardView>
 

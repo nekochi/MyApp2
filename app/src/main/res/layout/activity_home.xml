@@ -37,6 +37,21 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        <FrameLayout
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="bottom|end">
+            <Button
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:id="@+id/test_bt"
+                android:background="@drawable/button"
+                android:text="@string/test_tv"
+                android:textColor="@color/WHITE"
+                android:textSize="30sp"
+                android:elevation="5dp"
+                android:layout_gravity="center" />
+        </FrameLayout>
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView

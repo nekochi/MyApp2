@@ -1,6 +1,7 @@
 package com.nekomimi.net;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.ImageView;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,7 +18,7 @@ import com.nekomimi.base.NekoApplication;
  * Created by hongchi on 2015-8-21.
  */
 public class VolleyConnect {
-
+    public static final String TAG = "VolleyConnect";
     public static final String HOST = "http://www.baidu.com";
 
     private Context mContext;
@@ -52,13 +53,18 @@ public class VolleyConnect {
 //            }
 //        });
 //        stringRequest.setRequestProperty("apikey","31079c31653c3d102a92cebdda04c267");
+        Log.d(TAG,request.getUrl());
         mQueue.add(request);
     }
 
     public  void getImg(ImageView imageView,String url)
     {
+        getImg(imageView,url,0,0);
+    }
+    public void getImg(ImageView imageView,String url,int width,int height)
+    {
         ImageLoader imageLoader = new ImageLoader(mQueue, NImageCache.getInstance());
         ImageLoader.ImageListener listener = ImageLoader.getImageListener(imageView,R.drawable.ic_ab_drawer,R.drawable.ic_launcher);
-        imageLoader.get(url,listener);
+        imageLoader.get(url,listener,width,height);
     }
 }

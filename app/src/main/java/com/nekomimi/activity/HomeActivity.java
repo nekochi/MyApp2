@@ -3,16 +3,15 @@ package com.nekomimi.activity;
 import java.util.ArrayList;
 
 import com.nekomimi.R;
-import com.nekomimi.adapter.MyFragmentPagerAdapter;
+import com.nekomimi.adapter_listener.MyFragmentPagerAdapter;
+import com.nekomimi.base.AppConfig;
 import com.nekomimi.base.TestFragment;
 import com.nekomimi.fragment.HomeFragment;
 
-import com.nekomimi.view.TopTabView;
-import com.nekomimi.view.TopTabView.OnSelectedListener;
-
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -23,11 +22,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
+import android.widget.Toast;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -38,6 +39,18 @@ public class HomeActivity extends AppCompatActivity {
 	private Toolbar toolbar;
 	private DrawerLayout mDrawerLayout;
 	private TabLayout mTabLayout;
+	private Button mTestBt;
+
+	private boolean mIfQuit = false;
+	private int mFloatBtMargin ;
+	private Handler mHandler = new Handler()
+	{
+		public void handleMessage(Message msg)
+		{
+
+		}
+	};
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -45,6 +58,7 @@ public class HomeActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_home);
 		toolbar = (Toolbar)findViewById(R.id.toolbar);
 //		toolbar.setTitleTextColor(Color.WHITE);
+		mFloatBtMargin = AppConfig.mScanHeight / 32;
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		mTabLayout = (TabLayout)findViewById(R.id.toptab);
@@ -75,13 +89,21 @@ public class HomeActivity extends AppCompatActivity {
 		mFragmentList.add(fragment2);
 		mFragmentList.add(fragment3);
 		mFragmentList.add(fragment4);
-		MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
+		final MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
 		adapter.addFrag(mFragmentList.get(0),"Home");
 		adapter.addFrag(mFragmentList.get(1),"Search");
 		adapter.addFrag(mFragmentList.get(2),"Star");
-		adapter.addFrag(mFragmentList.get(3),"Me");
+		adapter.addFrag(mFragmentList.get(3), "Me");
+		mViewPager.setOffscreenPageLimit(3);
 		mViewPager.setAdapter(adapter);
 		mTabLayout.setupWithViewPager(mViewPager);
+		mTestBt = (Button)findViewById(R.id.test_bt);
+		mTestBt.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				((HomeFragment)adapter.getItem(0)).getMangaInfo();
+			}
+		});
 	}
 	
 	public class MyOnPageChangeListener implements OnPageChangeListener
@@ -127,5 +149,38 @@ public class HomeActivity extends AppCompatActivity {
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		mActionBarDrawerToggle.onConfigurationChanged(newConfig);
+	}
+
+	@Override
+	public void onBackPressed()
+	{
+		Log.d("TAG",String.valueOf(mIfQuit));
+		if(mIfQuit)
+		{
+			finish();
+		}
+		else
+		{
+			Toast.makeText(this,"press back to quit",Toast.LENGTH_LONG).show();
+			mIfQuit = true;
+			mHandler.postDelayed(runnable,3000);
+		}
+	}
+
+	Runnable runnable = new Runnable() {
+		@Override
+		public void run() {
+			mIfQuit = false;
+		}
+	};
+
+	public void showFloatBt()
+	{
+		mTestBt.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+	}
+
+	public void hideFloatBt()
+	{
+		mTestBt.animate().translationY(mTestBt.getHeight() + mFloatBtMargin).setInterpolator(new AccelerateInterpolator(2)).start();
 	}
 }

@@ -73,6 +73,8 @@ public class InitActivity extends Activity {
             Log.d("TAG","width:"+width);
             Log.d("TAG","height:"+height);
             Log.d("TAG","density:"+density);
+            AppConfig.mScanWidth = (int)width;
+            AppConfig.mScanHeight = (int)height;
             Intent intent = new Intent(InitActivity.this,LoginActivity.class);
             startActivity(intent);
             finish();

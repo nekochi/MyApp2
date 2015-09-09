@@ -12,6 +12,7 @@ import java.util.Map;
  * Created by hongchi on 2015-8-21.
  */
 public class AppConfig {
+    public static final String MANGAURL = "http://japi.juhe.cn/comic/book";
 
     public static final String ERROR = "ERROR";
     public static final String NOT_EXIST = "NOT_EXIST";
@@ -25,6 +26,8 @@ public class AppConfig {
     private String mUserAgent;
     private static AppConfig mAppConfig;
 
+    public static int mScanWidth;
+    public static int mScanHeight;
     public static AppConfig getInstance()
     {
         if(mAppConfig == null)

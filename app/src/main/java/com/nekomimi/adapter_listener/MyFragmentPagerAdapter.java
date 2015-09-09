@@ -1,4 +1,4 @@
-package com.nekomimi.adapter;
+package com.nekomimi.adapter_listener;
 
 import java.util.ArrayList;
 import java.util.List;
