@@ -5,10 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="8dp"
+    android:foreground="?android:attr/selectableItemBackground"
+
     app:cardCornerRadius="8dp">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         android:layout_margin="8dp">
         <ImageView
             android:id="@+id/iv_face"
@@ -42,6 +45,15 @@
             android:layout_toRightOf="@id/tv_mangatype"
             android:layout_margin="8dp"
             android:textColor="#000000"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="test"
+            android:textColor="#000000"
+            android:textColorHighlight="@color/colorRipple"
+            android:background="@color/colorPrimary"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"/>
     </RelativeLayout>
 
 

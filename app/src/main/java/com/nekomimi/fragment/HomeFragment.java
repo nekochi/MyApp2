@@ -10,7 +10,7 @@ import com.nekomimi.adapter_listener.RecyclerScorllListener;
 import com.nekomimi.base.AppConfig;
 import com.nekomimi.net.NekoJsonRequest;
 import com.nekomimi.net.VolleyConnect;
-import com.nekomimi.struct.MangaInfo;
+import com.nekomimi.bean.MangaInfo;
 import com.nekomimi.util.JsonUtil;
 import com.nekomimi.util.Util;
 
@@ -25,6 +25,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -38,6 +39,7 @@ public class HomeFragment extends Fragment
    // private Button mTestBt = null;
     private RecyclerView mRecycleView = null;
     private List<MangaInfo> mMangaDateList;
+    private MangaItemRcAdapter mAdapter;
 
     private Handler mHandle = new Handler(){
         public void handleMessage(Message msg)
@@ -51,8 +53,8 @@ public class HomeFragment extends Fragment
                     mMangaDateList = JsonUtil.paresMangaInfo((JSONObject)msg.obj);
                    if(mMangaDateList.isEmpty())
                        return;
-                   MangaItemRcAdapter adapter = new MangaItemRcAdapter(mMangaDateList);
-                   mRecycleView.setAdapter(adapter);
+                   mAdapter.setData(mMangaDateList);
+                   mRecycleView.setAdapter(mAdapter);
                    break;
                default:
                    break;
@@ -82,25 +84,7 @@ public class HomeFragment extends Fragment
 	 @Override
 	 public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 		 View root = inflater.inflate(R.layout.fragment_home, container , false);
-		// mTestBt = (Button)root.findViewById(R.id.test_tv);
-//         mTestBt.setOnClickListener(new View.OnClickListener() {
-//             @Override
-//             public void onClick(View view) {
-//                 Log.d("where", "onTouch");
-//                 VolleyConnect.getInstance().connect(NekoStringRequest.create("http://api.hitokoto.us/rand?cat=a", mHandle));
-//                 VolleyConnect.getInstance().getImg(mTestIv, "http://img2.myhsw.cn/2015-08-28/k9xkbx59.jpg");
 
-//                 new HttpConnectNet().execute("http://www.baidu.com");
-//             }
-//         });
-//         mTestBt.setOnTouchListener(new View.OnTouchListener() {
-//             @Override
-//             public boolean onTouch(View view, MotionEvent motionEvent) {
-//
-//
-//                 return false;
-//             }
-//         });
          mRecycleView = (RecyclerView)root.findViewById(R.id.mlist_rv);
          LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
          mRecycleView.setLayoutManager(layoutManager);
@@ -113,6 +97,14 @@ public class HomeFragment extends Fragment
              @Override
              public void hide() {
                  ((HomeActivity) getActivity()).hideFloatBt();
+             }
+         });
+         mAdapter = new MangaItemRcAdapter();
+         mAdapter.setOnItemClickListener(new MangaItemRcAdapter.OnRecyclerClickListener() {
+             @Override
+             public void onItemClick(View view, MangaInfo data) {
+                 //TO DO: 漫画卡片点击事件
+                 Toast.makeText(HomeFragment.this.getActivity(),data.getName(),Toast.LENGTH_SHORT).show();
              }
          });
 		 return root;

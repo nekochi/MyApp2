@@ -1,6 +1,6 @@
 package com.nekomimi.util;
 
-import com.nekomimi.struct.MangaInfo;
+import com.nekomimi.bean.MangaInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;

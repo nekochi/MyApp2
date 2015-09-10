@@ -44,12 +44,11 @@
             <Button
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+
                 android:id="@+id/test_bt"
-                android:background="@drawable/button"
+                android:background="@drawable/fab_selector"
                 android:text="@string/test_tv"
-                android:textColor="@color/WHITE"
-                android:textSize="30sp"
-                android:elevation="5dp"
+                android:stateListAnimator="@animator/fab_elevation_selector"
                 android:layout_gravity="center" />
         </FrameLayout>
     </android.support.design.widget.CoordinatorLayout>

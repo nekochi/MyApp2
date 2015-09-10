@@ -1,4 +1,4 @@
-package com.nekomimi.struct;
+package com.nekomimi.bean;
 
 /**
  * Created by hongchi on 2015-9-9.
