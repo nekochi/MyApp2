@@ -5,6 +5,7 @@ import com.nekomimi.R;
 
 
 import com.nekomimi.activity.HomeActivity;
+import com.nekomimi.activity.MangaInfoActivity;
 import com.nekomimi.adapter_listener.MangaItemRcAdapter;
 import com.nekomimi.adapter_listener.RecyclerScorllListener;
 import com.nekomimi.base.AppConfig;
@@ -15,6 +16,7 @@ import com.nekomimi.util.JsonUtil;
 import com.nekomimi.util.Util;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -105,6 +107,10 @@ public class HomeFragment extends Fragment
              public void onItemClick(View view, MangaInfo data) {
                  //TO DO: 漫画卡片点击事件
                  Toast.makeText(HomeFragment.this.getActivity(),data.getName(),Toast.LENGTH_SHORT).show();
+                 data.setCoverImgBt(view.findViewById(R.id.iv_face).getDrawingCache());
+                 Intent intent = new Intent(getActivity(), MangaInfoActivity.class);
+                 intent.putExtra("mangainfo",data);
+                 startActivity(intent);
              }
          });
 		 return root;

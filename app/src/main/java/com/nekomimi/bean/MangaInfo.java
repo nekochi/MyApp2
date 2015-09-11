@@ -1,16 +1,22 @@
 package com.nekomimi.bean;
 
+import android.graphics.Bitmap;
+
+import java.io.Serializable;
+
 /**
  * Created by hongchi on 2015-9-9.
  */
-public class MangaInfo {
+public class MangaInfo implements Serializable{
     private String mName;
     private String mType;
     private String mArea;
     private String mDes;
     private String mFinish;
     private String mLastUpdate;
-    private String mCoverImg;
+    private String mCoverImgSt;
+
+    private Bitmap mCoverImgBt;
 
     public String getName()
     {
@@ -54,11 +60,11 @@ public class MangaInfo {
     }
     public String getCoverImg()
     {
-        return mCoverImg;
+        return mCoverImgSt;
     }
     public void setCoverImg(String coverImg)
     {
-        this.mCoverImg = coverImg;
+        this.mCoverImgSt = coverImg;
     }
     public String getArea()
     {
@@ -67,5 +73,13 @@ public class MangaInfo {
     public void setArea(String area)
     {
         this.mArea = area;
+    }
+    public Bitmap getCoverImgBt()
+    {
+        return this.mCoverImgBt;
+    }
+    public void setCoverImgBt(Bitmap coverImg)
+    {
+        this.mCoverImgBt = coverImg;
     }
 }

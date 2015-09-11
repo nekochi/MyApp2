@@ -35,7 +35,6 @@
         <activity
             android:name=".activity.HomeActivity"
             android:label="@string/app_name" >
-
         </activity>
         <activity android:name=".activity.InitActivity"
             android:label="Manga">
@@ -47,13 +46,15 @@
         <activity
             android:name=".myapp.TestActivity"
             android:label="@string/title_activity_test" >
-
         </activity>
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateHidden" >
-
+        </activity>
+        <activity
+            android:name=".activity.MangaInfoActivity"
+            android:label="Manga Info">
         </activity>
 
     </application>

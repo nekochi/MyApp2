@@ -44,9 +44,7 @@
             <Button
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-
                 android:id="@+id/test_bt"
-                android:background="@drawable/fab_selector"
                 android:text="@string/test_tv"
                 android:stateListAnimator="@animator/fab_elevation_selector"
                 android:layout_gravity="center" />

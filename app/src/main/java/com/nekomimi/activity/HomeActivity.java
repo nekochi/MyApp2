@@ -9,6 +9,8 @@ import com.nekomimi.base.TestFragment;
 import com.nekomimi.fragment.HomeFragment;
 
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -92,12 +94,22 @@ public class HomeActivity extends AppCompatActivity {
 		final MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
 		adapter.addFrag(mFragmentList.get(0),"Home");
 		adapter.addFrag(mFragmentList.get(1),"Search");
-		adapter.addFrag(mFragmentList.get(2),"Star");
+		adapter.addFrag(mFragmentList.get(2), "Star");
 		adapter.addFrag(mFragmentList.get(3), "Me");
 		mViewPager.setOffscreenPageLimit(3);
 		mViewPager.setAdapter(adapter);
 		mTabLayout.setupWithViewPager(mViewPager);
 		mTestBt = (Button)findViewById(R.id.test_bt);
+		if(Integer.valueOf(Build.VERSION.SDK)>=21)
+		{
+			mTestBt.setBackground(getBaseContext().getResources().getDrawable(R.drawable.fab_selector_v21));
+		}
+		else
+		{
+			mTestBt.setBackground(getBaseContext().getResources().getDrawable(R.drawable.fab_selector));
+		}
+
+
 		mTestBt.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -176,11 +188,13 @@ public class HomeActivity extends AppCompatActivity {
 
 	public void showFloatBt()
 	{
+		mTestBt.animate().alpha(1);
 		mTestBt.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
 	}
 
 	public void hideFloatBt()
 	{
+		mTestBt.animate().alpha(0);
 		mTestBt.animate().translationY(mTestBt.getHeight() + mFloatBtMargin).setInterpolator(new AccelerateInterpolator(2)).start();
 	}
 }
