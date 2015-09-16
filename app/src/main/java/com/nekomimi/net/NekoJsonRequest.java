@@ -36,7 +36,9 @@ public class NekoJsonRequest extends JsonObjectRequest
     {
         @Override
         public void onErrorResponse(VolleyError volleyError) {
-
+            Message msg = new Message();
+            msg.what = 999999;
+            mHandler.sendMessage(msg);
         }
     };
     public static NekoJsonRequest create(String url,Handler handler)

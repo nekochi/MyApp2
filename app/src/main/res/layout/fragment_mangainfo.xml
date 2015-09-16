@@ -5,32 +5,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/iv_mangacover"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-        <TableLayout
-            android:layout_toRightOf="@id/iv_mangacover"
-            android:layout_toEndOf="@id/iv_mangacover"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-            <TableRow>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="18sp"
 
-                    android:text="tag :" />
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="18sp"
-                    android:text="shota"/>
-            </TableRow>
-        </TableLayout>
 
     </RelativeLayout>
 </LinearLayout>

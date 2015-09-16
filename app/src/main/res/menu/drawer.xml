@@ -6,5 +6,7 @@
             android:title="first title"/>
         <item android:title="second title"
             android:id="@+id/nav_menu_2"/>
+        <item android:title="setting"
+            android:id="@+id/drawer_setting"/>
     </group>
 </menu>

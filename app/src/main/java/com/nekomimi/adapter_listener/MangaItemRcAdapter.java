@@ -1,6 +1,8 @@
 package com.nekomimi.adapter_listener;
 
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,11 +54,12 @@ public class MangaItemRcAdapter extends RecyclerView.Adapter<MangaItemRcAdapter.
 
     @Override
     public void onBindViewHolder(MangaItemHolder holder, int position) {
-        holder.itemView.setTag(mDataList.get(position));
+        holder.itemView.setTag(holder);
+        holder.mData = mDataList.get(position);
         holder.mType_Tv.setText(mDataList.get(position).getType());
         holder.mTitle_Tv.setText(mDataList.get(position).getName());
         holder.mArea_Tv.setText(mDataList.get(position).getArea());
-        VolleyConnect.getInstance().getImg(holder.mFace_Iv,mDataList.get(position).getCoverImg(),mImgWidth,mImgHeight);
+        VolleyConnect.getInstance().getImg(holder.mFace_Iv, mDataList.get(position).getCoverImg(), mImgWidth, mImgHeight);
     }
 
     @Override
@@ -66,7 +69,11 @@ public class MangaItemRcAdapter extends RecyclerView.Adapter<MangaItemRcAdapter.
 
     @Override
     public void onClick(View view) {
-        mOnRecyclerClickListener.onItemClick(view,(MangaInfo)view.getTag());
+        MangaItemHolder holder = ((MangaItemHolder) view.getTag());
+        holder.mFace_Iv.setDrawingCacheEnabled(true);
+        holder.mData.setCoverImgBm((holder.mFace_Iv.getDrawingCache()).copy(Bitmap.Config.RGB_565,false));
+        holder.mFace_Iv.setDrawingCacheEnabled(false);
+        mOnRecyclerClickListener.onItemClick(view,holder.mData);
     }
 
 
@@ -76,6 +83,7 @@ public class MangaItemRcAdapter extends RecyclerView.Adapter<MangaItemRcAdapter.
         private TextView mTitle_Tv;
         private TextView mType_Tv;
         private TextView mArea_Tv;
+        private MangaInfo mData;
         public MangaItemHolder(View view)
         {
             super(view);
@@ -83,6 +91,7 @@ public class MangaItemRcAdapter extends RecyclerView.Adapter<MangaItemRcAdapter.
             mFace_Iv = (ImageView)view.findViewById(R.id.iv_face);
             mTitle_Tv = (TextView)view.findViewById(R.id.tv_mangatitle);
             mType_Tv = (TextView)view.findViewById(R.id.tv_mangatype);
+            mData = new MangaInfo();
         }
     }
 

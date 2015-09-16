@@ -1,13 +1,16 @@
 package com.nekomimi.bean;
 
-import android.graphics.Bitmap;
 
-import java.io.Serializable;
+import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+
 
 /**
  * Created by hongchi on 2015-9-9.
  */
-public class MangaInfo implements Serializable{
+public class MangaInfo implements Parcelable{
     private String mName;
     private String mType;
     private String mArea;
@@ -16,7 +19,9 @@ public class MangaInfo implements Serializable{
     private String mLastUpdate;
     private String mCoverImgSt;
 
-    private Bitmap mCoverImgBt;
+    private Bitmap mCoverImgBm = null;
+
+    public MangaInfo(){}
 
     public String getName()
     {
@@ -74,12 +79,59 @@ public class MangaInfo implements Serializable{
     {
         this.mArea = area;
     }
-    public Bitmap getCoverImgBt()
+    public Bitmap getCoverImgBm()
     {
-        return this.mCoverImgBt;
+        return this.mCoverImgBm;
     }
-    public void setCoverImgBt(Bitmap coverImg)
+    public void setCoverImgBm(Bitmap coverImg)
     {
-        this.mCoverImgBt = coverImg;
+        this.mCoverImgBm = coverImg;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(mName);
+        parcel.writeString(mArea);
+        parcel.writeString(mCoverImgSt);
+        parcel.writeString(mDes);
+        parcel.writeString(mFinish);
+        parcel.writeString(mLastUpdate);
+        parcel.writeString(mType);
+        parcel.writeParcelable(mCoverImgBm, i);
+    }
+
+    public static final Parcelable.Creator<MangaInfo> CREATOR = new Parcelable.Creator<MangaInfo>()
+    {
+        public MangaInfo createFromParcel(Parcel in)
+        {
+            return new MangaInfo(in);
+        }
+
+        public MangaInfo[] newArray(int size)
+        {
+            return new MangaInfo[size];
+        }
+    };
+
+    @SuppressWarnings("unchecked")
+    public MangaInfo(Parcel in) {
+        // TODO Auto-generated constructor stub
+        mName = in.readString();
+        mArea = in.readString();
+        mCoverImgSt = in.readString();
+        mDes = in.readString();
+
+
+
+        mFinish = in.readString();
+        mLastUpdate = in.readString();
+
+        mType = in.readString();
+        mCoverImgBm = in.readParcelable(null);
     }
 }

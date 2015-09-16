@@ -27,6 +27,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -42,6 +43,7 @@ public class HomeFragment extends Fragment
     private RecyclerView mRecycleView = null;
     private List<MangaInfo> mMangaDateList;
     private MangaItemRcAdapter mAdapter;
+    private View mProgressView;
 
     private Handler mHandle = new Handler(){
         public void handleMessage(Message msg)
@@ -56,7 +58,12 @@ public class HomeFragment extends Fragment
                    if(mMangaDateList.isEmpty())
                        return;
                    mAdapter.setData(mMangaDateList);
+                   Util.showProgress(false, mRecycleView, mProgressView);
                    mRecycleView.setAdapter(mAdapter);
+                   break;
+               case 999999:
+                   Toast.makeText(getActivity(),"网络错误",Toast.LENGTH_SHORT).show();
+                   Util.showProgress(false,mRecycleView,mProgressView);
                    break;
                default:
                    break;
@@ -80,8 +87,9 @@ public class HomeFragment extends Fragment
         requset.put("type","");
         requset.put("skip","");
         requset.put("finish","");
-        requset.put("key","e00b1e6d896c4f57ae552ab257186680");
-        VolleyConnect.getInstance().connect(NekoJsonRequest.create(Util.makeHtml(AppConfig.MANGAURL,requset,"UTF-8"),mHandle));
+        requset.put("key", "e00b1e6d896c4f57ae552ab257186680");
+        Util.showProgress(true, mRecycleView, mProgressView);
+        VolleyConnect.getInstance().connect(NekoJsonRequest.create(Util.makeHtml(AppConfig.MANGAURL, requset, "UTF-8"), mHandle));
     }
 	 @Override
 	 public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -107,13 +115,14 @@ public class HomeFragment extends Fragment
              public void onItemClick(View view, MangaInfo data) {
                  //TO DO: 漫画卡片点击事件
                  Toast.makeText(HomeFragment.this.getActivity(),data.getName(),Toast.LENGTH_SHORT).show();
-                 data.setCoverImgBt(view.findViewById(R.id.iv_face).getDrawingCache());
                  Intent intent = new Intent(getActivity(), MangaInfoActivity.class);
                  intent.putExtra("mangainfo",data);
+
                  startActivity(intent);
              }
          });
-		 return root;
+         mProgressView = root.findViewById(R.id.home_progress);
+         return root;
 	 }
 	@Override
     public void onDestroy() {
