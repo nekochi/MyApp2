@@ -13,6 +13,7 @@ import java.util.Map;
  */
 public class AppConfig {
     public static final String MANGAURL = "http://japi.juhe.cn/comic/book";
+    public static final String MANGAINFOURL = "http://japi.juhe.cn/comic/chapter";
 
     public static final String ERROR = "ERROR";
     public static final String NOT_EXIST = "NOT_EXIST";

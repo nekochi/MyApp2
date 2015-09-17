@@ -1,5 +1,6 @@
 package com.nekomimi.util;
 
+import com.nekomimi.bean.MangaChapterInfo;
 import com.nekomimi.bean.MangaInfo;
 
 import org.json.JSONArray;
@@ -14,7 +15,7 @@ import java.util.List;
  */
 public class JsonUtil {
 
-    public static List<MangaInfo> paresMangaInfo(JSONObject jsonObject)
+    public static List<MangaInfo> parseMangaInfo(JSONObject jsonObject)
     {
         List<MangaInfo> result = new ArrayList<>();
         try {
@@ -37,6 +38,29 @@ public class JsonUtil {
         {
             e.printStackTrace();
         }
+        return result;
+    }
+
+    public static List<MangaChapterInfo> praseMangaChapter(JSONObject jsonObject)
+    {
+        List<MangaChapterInfo> result = new ArrayList<>();
+        try{
+            JSONObject jb1 = jsonObject.getJSONObject("result");
+            JSONArray list = jb1.getJSONArray("chapterList");
+            for(int i = 0 ; i < list.length() ; i++)
+            {
+                JSONObject jb = list.getJSONObject(i);
+                MangaChapterInfo info = new MangaChapterInfo();
+                info.setChapterId(jb.getString("id"));
+                info.setChapterName(jb.getString("name"));
+                result.add(info);
+            }
+
+        }catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
         return result;
     }
 }

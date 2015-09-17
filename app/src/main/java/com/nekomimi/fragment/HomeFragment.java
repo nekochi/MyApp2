@@ -28,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -54,7 +55,7 @@ public class HomeFragment extends Fragment
                    Log.d("handler",String.valueOf(msg.obj));
                    break;
                case 1:
-                    mMangaDateList = JsonUtil.paresMangaInfo((JSONObject)msg.obj);
+                    mMangaDateList = JsonUtil.parseMangaInfo((JSONObject)msg.obj);
                    if(mMangaDateList.isEmpty())
                        return;
                    mAdapter.setData(mMangaDateList);
@@ -82,14 +83,14 @@ public class HomeFragment extends Fragment
     public void getMangaInfo()
     {
         Log.d("TAG", "test");
-        Map<String,String> requset = new HashMap<>();
-        requset.put("name","");
-        requset.put("type","");
-        requset.put("skip","");
-        requset.put("finish","");
-        requset.put("key", "e00b1e6d896c4f57ae552ab257186680");
+        Map<String,String> request = new HashMap<>();
+        request.put("name","");
+        request.put("type","");
+        request.put("skip","");
+        request.put("finish","");
+        request.put("key", "e00b1e6d896c4f57ae552ab257186680");
         Util.showProgress(true, mRecycleView, mProgressView);
-        VolleyConnect.getInstance().connect(NekoJsonRequest.create(Util.makeHtml(AppConfig.MANGAURL, requset, "UTF-8"), mHandle));
+        VolleyConnect.getInstance().connect(NekoJsonRequest.create(Util.makeHtml(AppConfig.MANGAURL, request, "UTF-8"), mHandle));
     }
 	 @Override
 	 public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {

@@ -16,6 +16,15 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter
 		// TODO Auto-generated constructor stub
 	}
 
+	public void changeFrag(Fragment fragment ,int position)
+	{
+		changeFrag(fragment,null,position);
+	}
+	public void changeFrag(Fragment fragment,String title ,int position)
+	{
+		mFragments.add(position,fragment);
+		if(title != null) mFragmentTitles.add(position,title);
+	}
 	public void addFrag(Fragment fragment, String title) {
 		mFragments.add(fragment);
 		mFragmentTitles.add(title);

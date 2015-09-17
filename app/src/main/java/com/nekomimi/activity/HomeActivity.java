@@ -35,6 +35,8 @@ import android.widget.Toast;
 
 public class HomeActivity extends AppCompatActivity {
 
+	private static final String TAG = "HomeActivity";
+
 	private ViewPager mViewPager = null;
 	private ArrayList<Fragment> mFragmentList;
 	private ActionBarDrawerToggle mActionBarDrawerToggle;
@@ -114,6 +116,7 @@ public class HomeActivity extends AppCompatActivity {
 			@Override
 			public void onClick(View view) {
 				((HomeFragment)adapter.getItem(0)).getMangaInfo();
+				Log.e(TAG,mViewPager.getHeight()+"");
 			}
 		});
 	}

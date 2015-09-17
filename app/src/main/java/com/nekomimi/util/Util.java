@@ -137,16 +137,16 @@ public class Util {
         // the progress spinner.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = NekoApplication.getInstance().getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            originView.setVisibility(show ? View.GONE : View.VISIBLE);
-            originView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    originView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
+            if(originView != null) {
+                originView.setVisibility(show ? View.GONE : View.VISIBLE);
+                originView.animate().setDuration(shortAnimTime).alpha(
+                        show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        originView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    }
+                });
+            }
             progressView.setVisibility(show ? View.VISIBLE : View.GONE);
             progressView.animate().setDuration(shortAnimTime).alpha(
                     show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
@@ -159,7 +159,9 @@ public class Util {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
             progressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            originView.setVisibility(show ? View.GONE : View.VISIBLE);
+            if(originView != null) {
+                originView.setVisibility(show ? View.GONE : View.VISIBLE);
+            }
         }
     }
 }

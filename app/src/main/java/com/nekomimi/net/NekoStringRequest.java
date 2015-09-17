@@ -43,7 +43,7 @@ public class NekoStringRequest extends StringRequest
     private static Response.ErrorListener mErrorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError volleyError) {
-
+            mHandler.sendEmptyMessage(999999);
         }
     };
     public static NekoStringRequest create(String url,Handler handler)

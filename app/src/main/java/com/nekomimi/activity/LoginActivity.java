@@ -247,7 +247,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
-//            showProgress(false);
+            Util.showProgress(false,null,mProgressView);
 
             if (success) {
                 AppConfig appConfig = AppConfig.getInstance();
