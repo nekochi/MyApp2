@@ -1,6 +1,7 @@
 package com.nekomimi.util;
 
 import com.nekomimi.bean.MangaChapterInfo;
+import com.nekomimi.bean.MangaImgInfo;
 import com.nekomimi.bean.MangaInfo;
 
 import org.json.JSONArray;
@@ -60,6 +61,29 @@ public class JsonUtil {
         {
             e.printStackTrace();
         }
+
+        return result;
+    }
+
+    public static List<MangaImgInfo> parseImgUrlList(JSONObject jsonObject)
+    {
+        List<MangaImgInfo> result = new ArrayList<>();
+        try{
+            JSONObject jb = jsonObject.getJSONObject("result");
+            JSONArray list = jb.getJSONArray("imageList");
+            for(int i = 0 ; i < list.length() ; i++)
+            {
+                MangaImgInfo imgInfo = new MangaImgInfo();
+                JSONObject info = list.getJSONObject(i);
+                imgInfo.setId(info.getString("id"));
+                imgInfo.setImgUrl(info.getString("imageUrl"));
+                result.add(imgInfo);
+            }
+        }catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+
 
         return result;
     }

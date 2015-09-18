@@ -12,12 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-
-import com.android.volley.Request;
 import com.nekomimi.R;
 import com.nekomimi.adapter_listener.MyFragmentPagerAdapter;
 import com.nekomimi.base.AppConfig;
@@ -60,7 +57,7 @@ public class MangaInfoActivity extends AppCompatActivity {
                     mMangaChapterList = JsonUtil.praseMangaChapter((JSONObject)msg.obj);
                     if(mMangaChapterList.isEmpty())
                         return;
-                    mFragments.add(0, MangaInfoFragment.create(mMangaChapterList));
+                    mFragments.add(0, MangaInfoFragment.create(mMangaChapterList,mMangaInfo.getName()));
                     ((MyFragmentPagerAdapter)mViewPager.getAdapter()).changeFrag(mFragments.get(0), 0);
                     mViewPager.getAdapter().notifyDataSetChanged();
                     Util.showProgress(false,mViewPager,mProgressbar);
@@ -120,6 +117,6 @@ public class MangaInfoActivity extends AppCompatActivity {
         Map<String,String> request = new HashMap<>();
         request.put("key", "e00b1e6d896c4f57ae552ab257186680");
         request.put("comicName",mMangaInfo.getName());
-        VolleyConnect.getInstance().connect( NekoJsonRequest.create(Util.makeHtml(AppConfig.MANGAINFOURL,request,"UTF-8"),mHandler));
+        VolleyConnect.getInstance().connect( NekoJsonRequest.create(Util.makeHtml(AppConfig.MANGAINFO_URL,request,"UTF-8"),mHandler));
     }
 }

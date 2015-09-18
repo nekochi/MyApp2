@@ -56,6 +56,9 @@
             android:name=".activity.MangaInfoActivity"
             android:label="Manga Info">
         </activity>
+        <activity android:name=".activity.MangaReaderActivity"
+            android:label="Manga Reader">
+        </activity>
 
     </application>
 

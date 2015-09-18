@@ -1,21 +1,6 @@
 package com.nekomimi.fragment;
 
 
-import com.nekomimi.R;
-
-
-import com.nekomimi.activity.HomeActivity;
-import com.nekomimi.activity.MangaInfoActivity;
-import com.nekomimi.adapter_listener.MangaItemRcAdapter;
-import com.nekomimi.adapter_listener.RecyclerScorllListener;
-import com.nekomimi.base.AppConfig;
-import com.nekomimi.net.NekoJsonRequest;
-import com.nekomimi.net.VolleyConnect;
-import com.nekomimi.bean.MangaInfo;
-import com.nekomimi.util.JsonUtil;
-import com.nekomimi.util.Util;
-
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,9 +12,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.nekomimi.R;
+import com.nekomimi.activity.HomeActivity;
+import com.nekomimi.activity.MangaInfoActivity;
+import com.nekomimi.adapter_listener.MangaItemRcAdapter;
+import com.nekomimi.adapter_listener.RecyclerScorllListener;
+import com.nekomimi.base.AppConfig;
+import com.nekomimi.bean.MangaInfo;
+import com.nekomimi.net.NekoJsonRequest;
+import com.nekomimi.net.VolleyConnect;
+import com.nekomimi.util.JsonUtil;
+import com.nekomimi.util.Util;
 
 import org.json.JSONObject;
 
@@ -82,7 +77,6 @@ public class HomeFragment extends Fragment
 
     public void getMangaInfo()
     {
-        Log.d("TAG", "test");
         Map<String,String> request = new HashMap<>();
         request.put("name","");
         request.put("type","");
@@ -90,7 +84,7 @@ public class HomeFragment extends Fragment
         request.put("finish","");
         request.put("key", "e00b1e6d896c4f57ae552ab257186680");
         Util.showProgress(true, mRecycleView, mProgressView);
-        VolleyConnect.getInstance().connect(NekoJsonRequest.create(Util.makeHtml(AppConfig.MANGAURL, request, "UTF-8"), mHandle));
+        VolleyConnect.getInstance().connect(NekoJsonRequest.create(Util.makeHtml(AppConfig.MANGA_URL, request, "UTF-8"), mHandle));
     }
 	 @Override
 	 public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {

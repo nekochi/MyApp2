@@ -1,6 +1,9 @@
 package com.nekomimi.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,17 +11,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.GridLayout;
-import android.widget.TextView;
 
 import com.nekomimi.R;
+import com.nekomimi.activity.MangaReaderActivity;
+import com.nekomimi.base.AppConfig;
 import com.nekomimi.base.NekoApplication;
 import com.nekomimi.bean.MangaChapterInfo;
+import com.nekomimi.bean.MangaImgInfo;
+import com.nekomimi.net.NekoJsonRequest;
+import com.nekomimi.net.VolleyConnect;
+import com.nekomimi.util.JsonUtil;
+import com.nekomimi.util.Util;
+
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.zip.Inflater;
+import java.util.Map;
 
 /**
  * Created by hongchi on 2015-9-14.
@@ -26,11 +37,30 @@ import java.util.zip.Inflater;
 public class MangaInfoFragment extends Fragment {
     private RecyclerView mChapterRv;
     private List<MangaChapterInfo> mDatas;
+    private String mMangaName;
 
-    public static MangaInfoFragment create(List<MangaChapterInfo> data)
+    private Handler mHandler = new Handler(){
+        public void handleMessage(Message msg)
+        {
+            switch (msg.what)
+            {
+                case 1:
+                    List<MangaImgInfo> object = JsonUtil.parseImgUrlList((JSONObject)msg.obj);
+                    Intent intent = new Intent(getActivity(), MangaReaderActivity.class);
+                    intent.putExtra("img",object.get(0).getImgUrl());
+                    startActivity(intent);
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
+    public static MangaInfoFragment create(List<MangaChapterInfo> data,String name)
     {
         MangaInfoFragment fragment = new MangaInfoFragment();
         Bundle bundle = new Bundle();
+        bundle.putString("Name",name);
         bundle.putSerializable("Data", (Serializable) data);
         fragment.setArguments(bundle);
         return fragment;
@@ -41,8 +71,10 @@ public class MangaInfoFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle arg = getArguments();
         if(arg != null)
+        {
+            mMangaName = arg.getString("Name");
             mDatas = (ArrayList<MangaChapterInfo>) arg.getSerializable("Data");
-
+        }
     }
 
     @Override
@@ -50,12 +82,25 @@ public class MangaInfoFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_mangainfo, container, false);
         mChapterRv = (RecyclerView) root.findViewById(R.id.rv_chapter);
         mChapterRv.setLayoutManager(new GridLayoutManager(this.getActivity(), 3));
-        mChapterRv.setAdapter(new MangaChapterAdapter(mDatas));
+        MangaChapterAdapter adapter = new MangaChapterAdapter(mDatas);
+        adapter.setRecyclerListener(new OnChapterClickListener() {
+            @Override
+            public void onChapterClick(View view, MangaChapterInfo data) {
+                Map<String,String> request = new HashMap<String, String>();
+                request.put("comicName",mMangaName);
+                request.put("id",data.getChapterId());
+                request.put("key", "e00b1e6d896c4f57ae552ab257186680");
+                VolleyConnect.getInstance().connect(NekoJsonRequest.create(Util.makeHtml(AppConfig.MANGACHAPTER_URL, request, "UTF-8"), mHandler));
+            }
+        });
+        mChapterRv.setAdapter(adapter);
         return root;
     }
 
-    class MangaChapterAdapter extends RecyclerView.Adapter<MangaChapterAdapter.MangaChapterHolder> implements View.OnClickListener{
+    class MangaChapterAdapter extends RecyclerView.Adapter<MangaChapterAdapter.MangaChapterHolder> implements View.OnClickListener
+    {
         private List<MangaChapterInfo> mDatas;
+        private OnChapterClickListener mListener;
 
         public MangaChapterAdapter(List<MangaChapterInfo> data)
         {
@@ -71,10 +116,17 @@ public class MangaInfoFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(MangaChapterHolder holder, int position) {
+        public void onBindViewHolder(final MangaChapterHolder holder, int position) {
             holder.itemView.setTag(holder);
             holder.mData = this.mDatas.get(position);
+            holder.mChapterBt.setTag(holder);
             holder.mChapterBt.setText(mDatas.get(position).getChapterName());
+            holder.mChapterBt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onChapterClick(view,((MangaChapterHolder)view.getTag()).mData);
+                }
+            });
         }
 
         @Override
@@ -84,7 +136,13 @@ public class MangaInfoFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
+            MangaChapterHolder holder = (MangaChapterHolder)view.getTag();
+            mListener.onChapterClick(view,holder.mData);
+        }
 
+        public void setRecyclerListener(OnChapterClickListener listener)
+        {
+            this.mListener = listener;
         }
 
         class MangaChapterHolder extends RecyclerView.ViewHolder{
@@ -98,4 +156,9 @@ public class MangaInfoFragment extends Fragment {
             }
         }
     }
+    public static interface OnChapterClickListener
+    {
+        void onChapterClick(View view ,MangaChapterInfo data);
+    }
+
 }

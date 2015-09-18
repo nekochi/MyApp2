@@ -3,6 +3,7 @@ package com.nekomimi.base;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.nekomimi.util.Util;
 
@@ -12,8 +13,9 @@ import java.util.Map;
  * Created by hongchi on 2015-8-21.
  */
 public class AppConfig {
-    public static final String MANGAURL = "http://japi.juhe.cn/comic/book";
-    public static final String MANGAINFOURL = "http://japi.juhe.cn/comic/chapter";
+    public static final String MANGA_URL = "http://japi.juhe.cn/comic/book";
+    public static final String MANGAINFO_URL = "http://japi.juhe.cn/comic/chapter";
+    public static final String MANGACHAPTER_URL = "http://japi.juhe.cn/comic/chapterContent";
 
     public static final String ERROR = "ERROR";
     public static final String NOT_EXIST = "NOT_EXIST";
@@ -22,6 +24,8 @@ public class AppConfig {
     public static final String CONF_APP_UNIQUEID = "APP_UNIQUEID";
     public static final String RESOLUTION = "Resolution";
     public static final String ACCOUNT = "Account";
+
+    public static String USERAGENT_VALUE = "";
     private  Context mContext;
     private  SharedPreferences mSharedPreferences;
     private String mUserAgent;
@@ -84,9 +88,12 @@ public class AppConfig {
     }
 
     public String getUserAgent() {
+        if(!TextUtils.equals(USERAGENT_VALUE,""))
+            return USERAGENT_VALUE;
         SharedPreferences sp = getSharedPreferences();
         if (sp == null) {
-            return ERROR;
+            Log.e(ERROR,"sharedpreferences not found");
+            return "";
         }
         String userAgent = sp.getString(USERAGENT, NOT_EXIST);
         if (TextUtils.equals(userAgent, NOT_EXIST)) {
@@ -97,9 +104,11 @@ public class AppConfig {
             ua.append("/" + android.os.Build.VERSION.RELEASE);
             ua.append("/" + android.os.Build.MODEL);
             ua.append("/" + ((NekoApplication) mContext).getAppId());
-            this.set(USERAGENT,ua.toString());
-            return ua.toString();
+            this.set(USERAGENT, ua.toString());
+            USERAGENT_VALUE = ua.toString();
+            return USERAGENT_VALUE;
         }
+        USERAGENT_VALUE = userAgent;
         return userAgent;
     }
     public void set(String key,String val)
