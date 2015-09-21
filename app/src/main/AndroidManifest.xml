@@ -57,7 +57,8 @@
             android:label="Manga Info">
         </activity>
         <activity android:name=".activity.MangaReaderActivity"
-            android:label="Manga Reader">
+            android:label="Manga Reader"
+            android:theme="@style/MangaReader">
         </activity>
 
     </application>

@@ -270,9 +270,11 @@ public class GestureImageViewTouchListener implements OnTouchListener {
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 
-		if(!inZoom) {
-			
-			if(!tapDetector.onTouchEvent(event)) {
+
+		if(!inZoom)
+		{
+			if(!tapDetector.onTouchEvent(event))
+			{
 				if(event.getPointerCount() == 1 && flingDetector.onTouchEvent(event)) {
 					startFling();
 				}
@@ -536,5 +538,13 @@ public class GestureImageViewTouchListener implements OnTouchListener {
 			boundaryTop = centerY - diff;
 			boundaryBottom = centerY + diff;
 		}
+	}
+	private void startInterceptEvent()
+	{
+		image.getParent().requestDisallowInterceptTouchEvent(false);
+	}
+	private void stopInterceptEvent()
+	{
+		image.getParent().requestDisallowInterceptTouchEvent(true);
 	}
 }

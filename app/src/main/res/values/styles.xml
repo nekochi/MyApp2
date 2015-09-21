@@ -16,5 +16,7 @@
         <item name="color">@android:color/white</item>
     </style>
 
-
+    <style name="MangaReader" parent="AppTheme">
+        <item name="android:windowBackground">@color/BLACK</item>
+    </style>
 </resources>

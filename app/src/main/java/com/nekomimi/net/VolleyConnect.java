@@ -64,7 +64,7 @@ public class VolleyConnect {
     public void getImg(ImageView imageView,String url,int width,int height)
     {
         ImageLoader imageLoader = new ImageLoader(mQueue, NImageCache.getInstance());
-        ImageLoader.ImageListener listener = ImageLoader.getImageListener(imageView,R.drawable.ic_ab_drawer,R.drawable.ic_launcher);
+        ImageLoader.ImageListener listener = ImageLoader.getImageListener(imageView,0,R.drawable.ic_launcher);
         imageLoader.get(url,listener,width,height);
     }
 }

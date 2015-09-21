@@ -1,22 +1,14 @@
 package com.nekomimi.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
-
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.provider.ContactsContract.Contacts;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -27,15 +19,16 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import com.nekomimi.R;
 import com.nekomimi.base.AppConfig;
 import com.nekomimi.base.BaseActivity;
 import com.nekomimi.util.Util;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A login screen that offers login via email/password.
@@ -60,6 +53,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
     private View mProgressView;
     private View mLoginFormView;
     private Button mSignInButton;
+    private RadioGroup mState;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +63,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         mAccountView = (AutoCompleteTextView) findViewById(R.id.account);
         mAccountView.setThreshold(1);
         populateAutoComplete();
-
+        mState = (RadioGroup)findViewById(R.id.rg_website);
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -112,44 +106,47 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             return;
         }
 
-        // Reset errors.
-        mAccountView.setError(null);
-        mPasswordView.setError(null);
-
-        // Store values at the time of the login attempt.
-        String account = mAccountView.getText().toString();
-        String password = mPasswordView.getText().toString();
-
-        boolean cancel = false;
-        View focusView = null;
-
-        // Check for a valid password, if the user entered one.
-        if (TextUtils.isEmpty(password) || !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-
-            cancel = true;
-        }
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(account) || !isAccountValid(account)) {
-            mAccountView.setError(getString(R.string.error_field_required));
-            focusView = mAccountView;
-            cancel = true;
-        }
-
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
+        if (mState.getCheckedRadioButtonId() == R.id.rb_ehentai) {
+            login(null,null);
+        } else if (mState.getCheckedRadioButtonId() == R.id.rb_exhentai) {
+            login(null,null);
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(mPasswordView.getWindowToken(), 0);
-            Util.showProgress(true, mLoginFormView, mProgressView);
-            mAuthTask = new UserLoginTask(account, password);
-            mAuthTask.execute((Void) null);
+
+            // Reset errors.
+            mAccountView.setError(null);
+            mPasswordView.setError(null);
+
+            // Store values at the time of the login attempt.
+            String account = mAccountView.getText().toString();
+            String password = mPasswordView.getText().toString();
+
+            boolean cancel = false;
+            View focusView = null;
+
+            // Check for a valid password, if the user entered one.
+            if (TextUtils.isEmpty(password) || !isPasswordValid(password)) {
+                mPasswordView.setError(getString(R.string.error_invalid_password));
+                focusView = mPasswordView;
+
+                cancel = true;
+            }
+
+            // Check for a valid email address.
+            if (TextUtils.isEmpty(account) || !isAccountValid(account)) {
+                mAccountView.setError(getString(R.string.error_field_required));
+                focusView = mAccountView;
+                cancel = true;
+            }
+
+            if (cancel) {
+                // There was an error; don't attempt login and focus the first
+                // form field with an error.
+                focusView.requestFocus();
+            } else {
+                // Show a progress spinner, and kick off a background task to
+                // perform the user login attempt.
+                login(account,password);
+            }
         }
     }
 
@@ -163,6 +160,14 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         return password.length() > 4;
     }
 
+    private void login(String account,String password)
+    {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mPasswordView.getWindowToken(), 0);
+        Util.showProgress(true, mLoginFormView, mProgressView);
+        mAuthTask = new UserLoginTask(account, password);
+        mAuthTask.execute((Void) null);
+    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {

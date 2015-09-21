@@ -39,6 +39,7 @@ public class MangaInfoFragment extends Fragment {
     private List<MangaChapterInfo> mDatas;
     private String mMangaName;
 
+
     private Handler mHandler = new Handler(){
         public void handleMessage(Message msg)
         {
@@ -47,7 +48,7 @@ public class MangaInfoFragment extends Fragment {
                 case 1:
                     List<MangaImgInfo> object = JsonUtil.parseImgUrlList((JSONObject)msg.obj);
                     Intent intent = new Intent(getActivity(), MangaReaderActivity.class);
-                    intent.putExtra("img",object.get(0).getImgUrl());
+                    intent.putExtra("img", (Serializable)object);
                     startActivity(intent);
                     break;
                 default:

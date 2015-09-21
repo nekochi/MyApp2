@@ -1,11 +1,11 @@
 package com.nekomimi.adapter_listener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter 
 {
@@ -22,8 +22,13 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter
 	}
 	public void changeFrag(Fragment fragment,String title ,int position)
 	{
-		mFragments.add(position,fragment);
+		mFragments.set(position,fragment);
 		if(title != null) mFragmentTitles.add(position,title);
+	}
+	public void removeFrag(int position)
+	{
+		mFragmentTitles.remove(position);
+		mFragments.remove(position);
 	}
 	public void addFrag(Fragment fragment, String title) {
 		mFragments.add(fragment);

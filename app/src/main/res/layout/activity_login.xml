@@ -18,9 +18,38 @@
         <LinearLayout android:id="@+id/email_login_form" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:orientation="vertical">
 
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/rg_website">
+                <RadioButton
+                    android:layout_width="0dp"
+                    android:id="@+id/rb_common"
+                    android:text="common"
+                    android:textColor="@color/BLACK"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:theme="@style/Base.Widget.AppCompat.CompoundButton.RadioButton"/>
+                <RadioButton
+                    android:layout_width="0dp"
+                    android:id="@+id/rb_ehentai"
+                    android:text="e-hentai"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:theme="@style/Base.Widget.AppCompat.CompoundButton.RadioButton"/>
+                <RadioButton
+                    android:layout_width="0dp"
+                    android:id="@+id/rb_exhentai"
+                    android:text="exhentai"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:theme="@style/Base.Widget.AppCompat.CompoundButton.RadioButton"/>
+            </RadioGroup>
             <AutoCompleteTextView android:id="@+id/account" android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:hint="@string/prompt_email"
-                android:inputType="textEmailAddress" android:maxLines="1"
+                android:layout_height="wrap_content" android:hint="@string/prompt_account"
+                 android:maxLines="1"
                 android:singleLine="true" />
 
             <EditText android:id="@+id/password" android:layout_width="match_parent"
