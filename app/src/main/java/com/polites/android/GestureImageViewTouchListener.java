@@ -25,7 +25,8 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 
 public class GestureImageViewTouchListener implements OnTouchListener {
-	
+	public static final String TAG = "GestureImageViewTouchListener";
+
 	private GestureImageView image;
 	private OnClickListener onClickListener;
 	
@@ -273,6 +274,13 @@ public class GestureImageViewTouchListener implements OnTouchListener {
 
 		if(!inZoom)
 		{
+			stopInterceptEvent();
+//			stopInterceptEvent();
+//			if((currentScale - startingScale < Float.MIN_VALUE)&&(startingScale - currentScale < Float.MIN_VALUE) )
+//			{
+//				Log.e(TAG, "SSSSSSSSSTTTTTTTAAAAAAAAARRRRRRRRTTTTTTTTTT");
+//				startInterceptEvent();
+//			}
 			if(!tapDetector.onTouchEvent(event))
 			{
 				if(event.getPointerCount() == 1 && flingDetector.onTouchEvent(event)) {
@@ -358,7 +366,7 @@ public class GestureImageViewTouchListener implements OnTouchListener {
 	}
 	
 	protected void handleUp() {
-		
+		startInterceptEvent();
 		multiTouch = false;
 		
 		initialDistance = 0;
@@ -371,7 +379,7 @@ public class GestureImageViewTouchListener implements OnTouchListener {
 		if(!canDragY) {
 			next.y = centerY;
 		}
-		
+
 		boundCoordinates();
 		
 		if(!canDragX && !canDragY) {
@@ -398,7 +406,6 @@ public class GestureImageViewTouchListener implements OnTouchListener {
 	}
 	
 	protected void handleScale(float scale, float x, float y) {
-		
 		currentScale = scale;
 
 		if(currentScale > maxScale) {
@@ -433,10 +440,25 @@ public class GestureImageViewTouchListener implements OnTouchListener {
 		float diffY = (current.y - last.y);
 		
 		if(diffX != 0 || diffY != 0) {
-			
+
 			if(canDragX) next.x += diffX;
 			if(canDragY) next.y += diffY;
-			
+
+			if(!canDragX){
+				startInterceptEvent();
+			}
+			else if(next.x <= boundaryLeft)
+			{
+				startInterceptEvent();
+			}else if(next.x>=boundaryRight)
+			{
+				startInterceptEvent();
+			}else if((currentScale - startingScale < Float.MIN_VALUE)&&(startingScale - currentScale < Float.MIN_VALUE) )
+			{
+				startInterceptEvent();
+			}else{
+				stopInterceptEvent();
+			}
 			boundCoordinates();
 			
 			last.x = current.x;
