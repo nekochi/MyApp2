@@ -2,8 +2,6 @@ package com.nekomimi.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,22 +12,12 @@ import android.widget.Button;
 
 import com.nekomimi.R;
 import com.nekomimi.activity.MangaReaderActivity;
-import com.nekomimi.base.AppConfig;
 import com.nekomimi.base.NekoApplication;
 import com.nekomimi.bean.MangaChapterInfo;
-import com.nekomimi.bean.MangaImgInfo;
-import com.nekomimi.net.NekoJsonRequest;
-import com.nekomimi.net.VolleyConnect;
-import com.nekomimi.util.JsonUtil;
-import com.nekomimi.util.Util;
-
-import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by hongchi on 2015-9-14.
@@ -40,22 +28,22 @@ public class MangaInfoFragment extends Fragment {
     private String mMangaName;
 
 
-    private Handler mHandler = new Handler(){
-        public void handleMessage(Message msg)
-        {
-            switch (msg.what)
-            {
-                case 1:
-                    List<MangaImgInfo> object = JsonUtil.parseImgUrlList((JSONObject)msg.obj);
-                    Intent intent = new Intent(getActivity(), MangaReaderActivity.class);
-                    intent.putExtra("img", (Serializable)object);
-                    startActivity(intent);
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
+//    private Handler mHandler = new Handler(){
+//        public void handleMessage(Message msg)
+//        {
+//            switch (msg.what)
+//            {
+//                case 1:
+//                    List<MangaImgInfo> object = JsonUtil.parseImgUrlList((JSONObject)msg.obj);
+//                    Intent intent = new Intent(getActivity(), MangaReaderActivity.class);
+//                    intent.putExtra("img", (Serializable)object);
+//                    startActivity(intent);
+//                    break;
+//                default:
+//                    break;
+//            }
+//        }
+//    };
 
     public static MangaInfoFragment create(List<MangaChapterInfo> data,String name)
     {
@@ -87,11 +75,15 @@ public class MangaInfoFragment extends Fragment {
         adapter.setRecyclerListener(new OnChapterClickListener() {
             @Override
             public void onChapterClick(View view, MangaChapterInfo data) {
-                Map<String,String> request = new HashMap<String, String>();
-                request.put("comicName",mMangaName);
-                request.put("id",data.getChapterId());
-                request.put("key", "e00b1e6d896c4f57ae552ab257186680");
-                VolleyConnect.getInstance().connect(NekoJsonRequest.create(Util.makeHtml(AppConfig.MANGACHAPTER_URL, request, "UTF-8"), mHandler));
+                Intent intent = new Intent(getActivity(),MangaReaderActivity.class);
+                intent.putExtra("mangaName",mMangaName);
+                intent.putExtra("id",data.getChapterId());
+                startActivity(intent);
+//                Map<String,String> request = new HashMap<String, String>();
+//                request.put("comicName",mMangaName);
+//                request.put("id",data.getChapterId());
+//                request.put("key", "e00b1e6d896c4f57ae552ab257186680");
+//                VolleyConnect.getInstance().connect(NekoJsonRequest.create(Util.makeHtml(AppConfig.MANGACHAPTER_URL, request, "UTF-8"), mHandler));
             }
         });
         mChapterRv.setAdapter(adapter);
