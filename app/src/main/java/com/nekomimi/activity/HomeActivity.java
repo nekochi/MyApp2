@@ -1,15 +1,7 @@
 package com.nekomimi.activity;
 
-import java.util.ArrayList;
-
-import com.nekomimi.R;
-import com.nekomimi.adapter_listener.MyFragmentPagerAdapter;
-import com.nekomimi.base.AppConfig;
-import com.nekomimi.base.TestFragment;
-import com.nekomimi.fragment.HomeFragment;
-
+import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,12 +17,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.nekomimi.R;
+import com.nekomimi.adapter_listener.MyFragmentPagerAdapter;
+import com.nekomimi.base.AppConfig;
+import com.nekomimi.base.TestFragment;
+import com.nekomimi.fragment.HomeFragment;
+
+import java.util.ArrayList;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -73,11 +72,19 @@ public class HomeActivity extends AppCompatActivity {
 		mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
 		NavigationView mNavTab = (NavigationView)findViewById(R.id.nav_view);
-		mNavTab.setOnTouchListener(new View.OnTouchListener() {
+		mNavTab.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 			@Override
-			public boolean onTouch(View view, MotionEvent motionEvent) {
-
-				return true;
+			public boolean onNavigationItemSelected(MenuItem menuItem) {
+				switch (menuItem.getItemId())
+				{
+					case R.id.drawer_setting:
+						Intent intent = new Intent(HomeActivity.this,SettingActivity.class);
+						startActivity(intent);
+						break;
+					default:
+						break;
+				}
+				return false;
 			}
 		});
 

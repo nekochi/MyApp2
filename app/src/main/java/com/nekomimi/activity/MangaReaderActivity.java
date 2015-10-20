@@ -34,7 +34,7 @@ import java.util.Map;
  */
 public class MangaReaderActivity extends AppCompatActivity implements MangaReaderFragment.OnFragmentInteractionListener{
 
-   // private GestureImageView mGImageView;
+   // private GestureImageView mGImageView
     private String mMangaName;
     private String mMangaChapterId;
     private List<MangaImgInfo> mImageInfoList;

@@ -117,6 +117,7 @@ public class MangaInfoFragment extends Fragment {
             holder.mChapterBt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if(mListener!=null)
                     mListener.onChapterClick(view,((MangaChapterHolder)view.getTag()).mData);
                 }
             });
