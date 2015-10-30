@@ -10,7 +10,6 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -128,28 +127,7 @@ public class HomeActivity extends AppCompatActivity {
 		});
 	}
 	
-	public class MyOnPageChangeListener implements OnPageChangeListener
-	{
 
-		@Override
-		public void onPageScrollStateChanged(int arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onPageScrolled(int arg0, float arg1, int arg2) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void onPageSelected(int arg0) {
-			// TODO Auto-generated method stub
-			Log.d("where", "onPageSelected");
-
-		}
-	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)

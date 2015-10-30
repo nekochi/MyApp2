@@ -2,10 +2,12 @@ package com.nekomimi.fragment;
 
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -33,13 +35,16 @@ import java.util.List;
 import java.util.Map;
 
 
-public class HomeFragment extends Fragment
+public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener
 {
    // private Button mTestBt = null;
     private RecyclerView mRecycleView = null;
     private List<MangaInfo> mMangaDateList;
     private MangaItemRcAdapter mAdapter;
     private View mProgressView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    private int mLastVisibleItem;
 
     private Handler mHandle = new Handler(){
         public void handleMessage(Message msg)
@@ -64,6 +69,7 @@ public class HomeFragment extends Fragment
                default:
                    break;
            }
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     };
 	@Override
@@ -89,11 +95,19 @@ public class HomeFragment extends Fragment
 	 @Override
 	 public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 		 View root = inflater.inflate(R.layout.fragment_home, container , false);
-
+         mSwipeRefreshLayout = (SwipeRefreshLayout)root.findViewById(R.id.srl_refresh);
+         mSwipeRefreshLayout.setColorSchemeColors(Color.RED);
+         mSwipeRefreshLayout.setOnRefreshListener(this);
          mRecycleView = (RecyclerView)root.findViewById(R.id.mlist_rv);
-         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
          mRecycleView.setLayoutManager(layoutManager);
          mRecycleView.addOnScrollListener(new RecyclerScorllListener() {
+             @Override
+             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView,dx,dy);
+                 mLastVisibleItem = layoutManager.findLastVisibleItemPosition();
+             }
+
              @Override
              public void show() {
                  ((HomeActivity) getActivity()).showFloatBt();
@@ -102,6 +116,22 @@ public class HomeFragment extends Fragment
              @Override
              public void hide() {
                  ((HomeActivity) getActivity()).hideFloatBt();
+             }
+
+             @Override
+             public void onScrollStateChanged(RecyclerView recyclerView,
+                                              int newState) {
+                 super.onScrollStateChanged(recyclerView, newState);
+                 if(mAdapter == null || mAdapter.getData() == null)
+                 {
+                     return;
+                 }
+                 if (newState == RecyclerView.SCROLL_STATE_IDLE
+                         && mLastVisibleItem + 1 == mAdapter.getItemCount())
+                 {
+                    //todo ：上拉加载
+                    Toast.makeText(getActivity(),"up loading",Toast.LENGTH_SHORT).show();
+                 }
              }
          });
          mAdapter = new MangaItemRcAdapter();
@@ -122,5 +152,12 @@ public class HomeFragment extends Fragment
 	@Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onRefresh() {
+        Toast.makeText(getActivity(),"refresh!",Toast.LENGTH_SHORT).show();
+        mSwipeRefreshLayout.setRefreshing(true);
+        getMangaInfo();
     }
 }

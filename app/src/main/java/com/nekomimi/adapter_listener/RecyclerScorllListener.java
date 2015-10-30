@@ -40,6 +40,7 @@ public abstract class RecyclerScorllListener extends RecyclerView.OnScrollListen
     }
 
 
+
     public abstract void show();
 
     public abstract void hide();

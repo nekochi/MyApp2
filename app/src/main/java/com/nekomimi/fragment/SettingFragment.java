@@ -16,16 +16,17 @@ import com.nekomimi.R;
  */
 public class SettingFragment extends Fragment {
 
-
+    private int mFlag;
     private String[] mDataString;
-
+    private OnSelectedListener mListener;
 
     private RecyclerView mSettingRv;
-    public static SettingFragment create(String[] str)
+    public static SettingFragment create(String[] str,int flag)
     {
         SettingFragment settingFragment = new SettingFragment();
         Bundle bundle = new Bundle();
         bundle.putStringArray("data",str);
+        bundle.putInt("type",flag);
         settingFragment.setArguments(bundle);
         return settingFragment;
     }
@@ -43,6 +44,7 @@ public class SettingFragment extends Fragment {
         if(getArguments()!=null)
         {
             mDataString = getArguments().getStringArray("data");
+            mFlag = getArguments().getInt("type");
         }
     }
 
@@ -58,7 +60,16 @@ public class SettingFragment extends Fragment {
         return root;
     }
 
-    class SettingItemAdapter extends RecyclerView.Adapter<SettingItemAdapter.SettingItemHolder>
+    public void setOnSelectedListener(OnSelectedListener listener)
+    {
+        this.mListener = listener;
+    }
+
+    public interface OnSelectedListener{
+        void onSelected(View view,int flag);
+    }
+
+    class SettingItemAdapter extends RecyclerView.Adapter<SettingItemAdapter.SettingItemHolder> implements View.OnClickListener
     {
         String[] mData ;
 
@@ -82,6 +93,15 @@ public class SettingFragment extends Fragment {
         public void onBindViewHolder(SettingItemHolder holder, int position) {
             holder.itemView.setTag(holder);
             holder.mSettingItemTv.setText(mData[position]);
+            holder.itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if(mListener!=null)
+            {
+                mListener.onSelected(view,mFlag);
+            }
         }
 
         class SettingItemHolder extends RecyclerView.ViewHolder
