@@ -1,12 +1,12 @@
 package com.nekomimi.base;
 
 import android.app.Application;
-import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.text.TextUtils;
+
+import com.nekomimi.service.NetService;
 
 import java.util.UUID;
 
@@ -26,44 +26,19 @@ public class NekoApplication extends Application {
         return mNekoApplication;
     }
 
+    @Override
     public void onCreate()
     {
         super.onCreate();
         mNekoApplication = this;
     }
-    public boolean isNetworkConnected()
-    {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = cm.getActiveNetworkInfo();
-        return ni!=null&&ni.isConnectedOrConnecting();
-    }
 
-
-    public int getNetworkType()
+    @Override
+    public void onTerminate()
     {
-        int netType = 0;
-        ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = cm.getActiveNetworkInfo();
-        if(ni == null)
-        {
-            return netType;
-        }
-        int nType = ni.getType();
-        if(nType == ConnectivityManager.TYPE_MOBILE) {
-            String extraInfo = ni.getExtraInfo();
-            if (!extraInfo.isEmpty()) {
-                if (extraInfo.toLowerCase().equals("cmnet")) {
-                    netType = NETTYPE_CMNET;
-                } else {
-                    netType = NETTYPE_CMWAP;
-                }
-            }
-        }
-        else if (nType == ConnectivityManager.TYPE_WIFI)
-        {
-            netType = NETTYPE_WIFI;
-        }
-        return netType;
+        super.onTerminate();
+        Intent intent = new Intent(this, NetService.class);
+        stopService(intent);
     }
 
     public String getAppId() {

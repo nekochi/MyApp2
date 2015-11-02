@@ -64,7 +64,7 @@
             android:label="Manga Reader"
             android:theme="@style/MangaReader">
         </activity>
-
+        <service android:enabled="true" android:name=".service.NetService" />
     </application>
 
 </manifest>
