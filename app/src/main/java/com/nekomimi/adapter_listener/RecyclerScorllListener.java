@@ -1,11 +1,13 @@
 package com.nekomimi.adapter_listener;
 
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 /**
  * Created by hongchi on 2015-9-9.
  */
 public abstract class RecyclerScorllListener extends RecyclerView.OnScrollListener {
+    private static final String TAG = "RecyclerScorllListener";
     private static final float HIDE_THRESHOLD = 100;
     private static final float SHOW_THRESHOLD = 50;
 
@@ -15,7 +17,6 @@ public abstract class RecyclerScorllListener extends RecyclerView.OnScrollListen
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
-
         //  Check scrolled distance against the minimum
         if (isVisible && scrollDist > HIDE_THRESHOLD) {
             //  Hide fab & reset scrollDist
@@ -24,7 +25,7 @@ public abstract class RecyclerScorllListener extends RecyclerView.OnScrollListen
             isVisible = false;
         }
         //  -MINIMUM because scrolling up gives - dy values
-        else if (!isVisible && scrollDist < -SHOW_THRESHOLD) {
+        else if (!isVisible && scrollDist < -SHOW_THRESHOLD  &&((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition()>10)  {
             //  Show fab & reset scrollDist
             show();
 

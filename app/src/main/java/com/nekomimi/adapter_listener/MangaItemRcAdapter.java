@@ -101,11 +101,11 @@ public class MangaItemRcAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         holder.mFace_Iv.setDrawingCacheEnabled(true);
         holder.mData.setCoverImgBm((holder.mFace_Iv.getDrawingCache()).copy(Bitmap.Config.RGB_565,false));
         holder.mFace_Iv.setDrawingCacheEnabled(false);
-        mOnRecyclerClickListener.onItemClick(view, holder.mData);
+        mOnRecyclerClickListener.onItemClick(view, holder);
     }
 
 
-    class MangaItemHolder extends RecyclerView.ViewHolder
+    public class MangaItemHolder extends RecyclerView.ViewHolder
     {
         private ImageView mFace_Iv;
         private TextView mTitle_Tv;
@@ -121,6 +121,16 @@ public class MangaItemRcAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             mType_Tv = (TextView)view.findViewById(R.id.tv_mangatype);
             mData = new MangaInfo();
         }
+
+        public MangaInfo getData()
+        {
+            return this.mData;
+        }
+
+        public ImageView getImage()
+        {
+            return this.mFace_Iv;
+        }
     }
 
     class FootViewHolder extends RecyclerView.ViewHolder
@@ -135,8 +145,8 @@ public class MangaItemRcAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         this.mOnRecyclerClickListener = listener;
     }
 
-    public static interface OnRecyclerClickListener
+    public  interface OnRecyclerClickListener
     {
-        void onItemClick(View view,MangaInfo data);
+        void onItemClick(View view,MangaItemHolder holder);
     }
 }

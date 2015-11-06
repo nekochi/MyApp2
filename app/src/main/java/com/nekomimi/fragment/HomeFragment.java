@@ -1,8 +1,8 @@
 package com.nekomimi.fragment;
 
-
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -59,12 +59,12 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                    if(mMangaDateList.isEmpty())
                        return;
                    mAdapter.setData(mMangaDateList);
-                   Util.showProgress(false, mRecycleView, mProgressView);
+                  // Util.showProgress(false, mRecycleView, mProgressView);
                    mRecycleView.setAdapter(mAdapter);
                    break;
                case 999999:
                    Toast.makeText(getActivity(),"网络错误",Toast.LENGTH_SHORT).show();
-                   Util.showProgress(false,mRecycleView,mProgressView);
+                  // Util.showProgress(false,mRecycleView,mProgressView);
                    break;
                default:
                    break;
@@ -89,7 +89,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         request.put("skip","");
         request.put("finish","");
         request.put("key", "e00b1e6d896c4f57ae552ab257186680");
-        Util.showProgress(true, mRecycleView, mProgressView);
+        //Util.showProgress(true, mRecycleView, mProgressView);
         VolleyConnect.getInstance().connect(NekoJsonRequest.create(Util.makeHtml(AppConfig.MANGA_URL, request, "UTF-8"), mHandle));
     }
 	 @Override
@@ -137,16 +137,26 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
          mAdapter = new MangaItemRcAdapter();
          mAdapter.setOnItemClickListener(new MangaItemRcAdapter.OnRecyclerClickListener() {
              @Override
-             public void onItemClick(View view, MangaInfo data) {
+             public void onItemClick(View view,MangaItemRcAdapter.MangaItemHolder holder)
+             {
                  //TO DO: 漫画卡片点击事件
-                 Toast.makeText(HomeFragment.this.getActivity(),data.getName(),Toast.LENGTH_SHORT).show();
+                 Toast.makeText(HomeFragment.this.getActivity(),holder.getData().getName(),Toast.LENGTH_SHORT).show();
                  Intent intent = new Intent(getActivity(), MangaInfoActivity.class);
-                 intent.putExtra("mangainfo",data);
-
-                 startActivity(intent);
+                 intent.putExtra("mangainfo",holder.getData());
+                 if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)
+                 {
+                     MangaInfoActivity.launch((HomeActivity)getActivity(),holder.getImage(),intent);
+                 }
+                 else
+                 {
+                     startActivity(intent);
+                 }
              }
          });
          mProgressView = root.findViewById(R.id.home_progress);
+         onRefresh();
+
+
          return root;
 	 }
 	@Override
@@ -159,5 +169,10 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         Toast.makeText(getActivity(),"refresh!",Toast.LENGTH_SHORT).show();
         mSwipeRefreshLayout.setRefreshing(true);
         getMangaInfo();
+    }
+
+    public void scrollToTop()
+    {
+        mRecycleView.smoothScrollToPosition(0);
     }
 }

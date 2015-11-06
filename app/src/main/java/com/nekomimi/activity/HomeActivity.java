@@ -27,6 +27,7 @@ import com.nekomimi.adapter_listener.MyFragmentPagerAdapter;
 import com.nekomimi.base.AppConfig;
 import com.nekomimi.base.TestFragment;
 import com.nekomimi.fragment.HomeFragment;
+import com.nekomimi.service.NetService;
 
 import java.util.ArrayList;
 
@@ -108,7 +109,7 @@ public class HomeActivity extends AppCompatActivity {
 		mViewPager.setAdapter(adapter);
 		mTabLayout.setupWithViewPager(mViewPager);
 		mTestBt = (Button)findViewById(R.id.test_bt);
-		if(Integer.valueOf(Build.VERSION.SDK)>=21)
+		if(Build.VERSION.SDK_INT>=21)
 		{
 			mTestBt.setBackground(getBaseContext().getResources().getDrawable(R.drawable.fab_selector_v21));
 		}
@@ -121,10 +122,12 @@ public class HomeActivity extends AppCompatActivity {
 		mTestBt.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				((HomeFragment)adapter.getItem(0)).getMangaInfo();
+				((HomeFragment)adapter.getItem(0)).scrollToTop();
 				Log.e(TAG,mViewPager.getHeight()+"");
 			}
 		});
+
+		hideFloatBt();
 	}
 	
 
@@ -157,6 +160,8 @@ public class HomeActivity extends AppCompatActivity {
 		Log.d("TAG",String.valueOf(mIfQuit));
 		if(mIfQuit)
 		{
+			Intent intent = new Intent(this, NetService.class);
+			stopService(intent);
 			finish();
 		}
 		else

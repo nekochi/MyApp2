@@ -1,15 +1,18 @@
 package com.nekomimi.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,6 +29,7 @@ import com.nekomimi.net.NekoJsonRequest;
 import com.nekomimi.net.VolleyConnect;
 import com.nekomimi.util.JsonUtil;
 import com.nekomimi.util.Util;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -33,7 +37,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 /**
  * Created by hongchi on 2015-9-10.
  */
@@ -70,25 +73,35 @@ public class MangaInfoActivity extends AppCompatActivity {
         }
     };
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mangainfo);
 
         mToolbar = (Toolbar)findViewById(R.id.toolbar);
-
         Intent intent = getIntent();
         mMangaInfo = (MangaInfo)intent.getParcelableExtra("mangainfo");
-        Log.d(TAG, mMangaInfo.getName());
+        mProgressbar = findViewById(R.id.mangainfo_progress);
+        mCoverIv = (ImageView)findViewById(R.id.iv_mangacover);
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)
+        {
+            ViewCompat.setTransitionName(mCoverIv, "shareImg");
+            Picasso.with(mCoverIv.getContext()).load(mMangaInfo.getCoverImg()).noFade().into(mCoverIv);
+        }
+        else
+        {
+            mCoverIv.setImageBitmap(mMangaInfo.getCoverImgBm());
+        }
+        mTabLayout = (TabLayout)findViewById(R.id.tl_mangainfo);
+        mViewPager = (ViewPager)findViewById(R.id.vp_mangainfo);
+
         mToolbar.setTitle(mMangaInfo.getName());
         setSupportActionBar(mToolbar);
 
-        mProgressbar = findViewById(R.id.mangainfo_progress);
-        mCoverIv = (ImageView)findViewById(R.id.iv_mangacover);
-        mCoverIv.setImageBitmap(mMangaInfo.getCoverImgBm());
-        mTabLayout = (TabLayout)findViewById(R.id.tl_mangainfo);
-        mViewPager = (ViewPager)findViewById(R.id.vp_mangainfo);
+
+
+
+
         final MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
         mFragments = new ArrayList<>();
         mFragments.add(new TestFragment("#026719"));
@@ -118,5 +131,12 @@ public class MangaInfoActivity extends AppCompatActivity {
         request.put("key", "e00b1e6d896c4f57ae552ab257186680");
         request.put("comicName",mMangaInfo.getName());
         VolleyConnect.getInstance().connect( NekoJsonRequest.create(Util.makeHtml(AppConfig.MANGAINFO_URL,request,"UTF-8"),mHandler));
+    }
+
+    public static void launch(AppCompatActivity activity, View transitionView,Intent intent) {
+        ActivityOptionsCompat options =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        activity, transitionView, "shareImg");
+        ActivityCompat.startActivity(activity, intent, options.toBundle());
     }
 }

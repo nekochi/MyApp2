@@ -27,7 +27,7 @@
                     android:layout_width="0dp"
                     android:id="@+id/rb_common"
                     android:text="common"
-                    android:textSize="24sp"
+                    android:textSize="18sp"
                     android:textColor="@color/BLACK"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -37,7 +37,7 @@
                     android:layout_width="0dp"
                     android:id="@+id/rb_ehentai"
                     android:text="e-hentai"
-                    android:textSize="24sp"
+                    android:textSize="18sp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:theme="@style/Base.Widget.AppCompat.CompoundButton.RadioButton"/>
@@ -45,7 +45,7 @@
                     android:layout_width="0dp"
                     android:id="@+id/rb_exhentai"
                     android:text="exhentai"
-                    android:textSize="24sp"
+                    android:textSize="18sp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:theme="@style/Base.Widget.AppCompat.CompoundButton.RadioButton"/>

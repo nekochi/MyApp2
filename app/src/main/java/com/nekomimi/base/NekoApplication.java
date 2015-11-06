@@ -1,12 +1,9 @@
 package com.nekomimi.base;
 
 import android.app.Application;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.text.TextUtils;
-
-import com.nekomimi.service.NetService;
 
 import java.util.UUID;
 
@@ -33,13 +30,7 @@ public class NekoApplication extends Application {
         mNekoApplication = this;
     }
 
-    @Override
-    public void onTerminate()
-    {
-        super.onTerminate();
-        Intent intent = new Intent(this, NetService.class);
-        stopService(intent);
-    }
+
 
     public String getAppId() {
         String uniqueID = AppConfig.getInstance().get(AppConfig.CONF_APP_UNIQUEID);
