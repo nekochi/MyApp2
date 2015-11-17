@@ -1,70 +1,125 @@
 package com.nekomimi.net;
 
-import android.content.Context;
-import android.util.Log;
 import android.widget.ImageView;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
-import com.nekomimi.R;
+import com.nekomimi.base.AppActionImpl;
 import com.nekomimi.base.NImageCache;
 import com.nekomimi.base.NekoApplication;
 
+import org.json.JSONObject;
 
-
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Map;
 
 /**
- * Created by hongchi on 2015-8-21.
+ * Created by hongchi on 2015-11-10.
  */
-public class VolleyConnect {
-    public static final String TAG = "VolleyConnect";
-    public static final String HOST = "http://www.baidu.com";
+public class VolleyConnect
+{
+    public static final int GET = Request.Method.GET;
+    public static final int POST = Request.Method.POST;
+    public static final int SUCCEED = 0;
+    public static final int FALSE = -1;
 
-    private Context mContext;
-    private RequestQueue mQueue;
-    private static VolleyConnect mVolleyConnect;
-    public static VolleyConnect getInstance() {
-        if (mVolleyConnect == null)
+    private VolleyConnect(){}
+
+    private static VolleyConnect mInstance = null;
+    private RequestQueue mRequestQueue;
+    public static VolleyConnect getInstance()
+    {
+        if(mInstance == null)
         {
-            mVolleyConnect = new VolleyConnect();
-            mVolleyConnect.mContext = NekoApplication.getInstance();
-            mVolleyConnect.mQueue = Volley.newRequestQueue(mVolleyConnect.mContext);
+            mInstance = new VolleyConnect();
+            mInstance.mRequestQueue = Volley.newRequestQueue(NekoApplication.getInstance());
         }
-        return mVolleyConnect;
+        return mInstance;
     }
 
-    public  void connect()
+    public void getStringRequest(Map<String,String> params ,String url,Response.Listener<String> listener,Response.ErrorListener errorListener)
     {
-//        connect(HOST);
+        stringRequest(GET,params ,url,listener,errorListener,null);
     }
-    public  void connect(Request request)
+    public void postStringRequest(Map<String,String> params ,String url,Response.Listener<String> listener
+            ,Response.ErrorListener errorListener,Map<String,String> datas)
     {
-//        NekoStringRequest stringRequest = new NekoStringRequest(Request.Method.GET, url ,new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String s) {
-//              System.out.println(s);
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError volleyError) {
-//                Log.e("ERROR",volleyError.getMessage(),volleyError);
-//
-//            }
-//        });
-//        stringRequest.setRequestProperty("apikey","31079c31653c3d102a92cebdda04c267");
-        Log.d(TAG,request.getUrl());
-        mQueue.add(request);
+        stringRequest(POST,params,url,listener,errorListener,datas);
+    }
+    public void stringRequest( int method,Map<String,String> params ,String url,Response.Listener<String> listener
+            ,Response.ErrorListener errorListener,Map<String,String> datas)
+    {
+        NekoStringRequest sr = NekoStringRequest.create(method, makeHtml(url, params, "UTF-8"), listener, errorListener,datas);
+        mRequestQueue.add(sr);
     }
 
-    public  void getImg(ImageView imageView,String url)
+    public void getJsonRequest(Map<String,String> params ,String url,Response.Listener<JSONObject> listener,Response.ErrorListener errorListener)
     {
-        getImg(imageView,url,0,0);
+        jsonRequest(GET, params, url, listener, errorListener, null);
     }
-    public void getImg(ImageView imageView,String url,int width,int height)
+    public void postJsonRequest(Map<String,String> params ,String url,Response.Listener<JSONObject> listener
+            ,Response.ErrorListener errorListener,Map<String,String> datas)
     {
-        ImageLoader imageLoader = new ImageLoader(mQueue, NImageCache.getInstance());
-        ImageLoader.ImageListener listener = ImageLoader.getImageListener(imageView,0,R.drawable.ic_launcher);
+        jsonRequest(POST, params, url, listener, errorListener, datas);
+    }
+    public void jsonRequest(int method,Map<String,String> params ,String url,Response.Listener<JSONObject> listener
+            ,Response.ErrorListener errorListener,Map<String,String> datas)
+    {
+        NekoJsonRequest jr = NekoJsonRequest.create(method,makeHtml(url, params, "UTF-8"),listener,errorListener,datas);
+        mRequestQueue.add(jr);
+    }
+
+    public void getImg(final String url,final ImageView view,final AppActionImpl.Callback<Void> callback,int height,int width)
+    {
+        ImageLoader imageLoader = new ImageLoader(mRequestQueue, NImageCache.getInstance());
+        ImageLoader.ImageListener listener = new ImageLoader.ImageListener()
+        {
+            @Override
+            public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b)
+            {
+                if(imageContainer.getBitmap()!=null)
+                {
+                    view.setImageBitmap(imageContainer.getBitmap());
+                }
+                if(callback!=null)
+                    callback.onResponce(true,null);
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError volleyError)
+            {
+                if(callback!=null)
+                    callback.onResponce(false,null);
+            }
+        };
         imageLoader.get(url,listener,width,height);
     }
+
+
+
+    public  String makeHtml(String url,Map<String,String> params,String encode) {
+        if (params == null)
+        {
+            return url;
+        }
+        StringBuilder urlResult = new StringBuilder();
+        try {
+            urlResult.append(url).append("?");
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                urlResult.append(entry.getKey()).append("=").append(URLEncoder.encode(entry.getValue(), encode)).append("&");
+            }
+            urlResult.deleteCharAt(urlResult.length() - 1);
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
+        }
+        return urlResult.toString();
+    }
+
 }

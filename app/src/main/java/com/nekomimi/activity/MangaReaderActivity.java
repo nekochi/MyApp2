@@ -15,11 +15,8 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.nekomimi.R;
-import com.nekomimi.base.AppConfig;
 import com.nekomimi.bean.MangaImgInfo;
 import com.nekomimi.fragment.MangaReaderFragment;
-import com.nekomimi.net.NekoJsonRequest;
-import com.nekomimi.net.VolleyConnect;
 import com.nekomimi.util.JsonUtil;
 import com.nekomimi.util.Util;
 
@@ -71,7 +68,7 @@ public class MangaReaderActivity extends AppCompatActivity implements MangaReade
         request.put("comicName", mMangaName);
         request.put("id", mMangaChapterId);
         request.put("key", "e00b1e6d896c4f57ae552ab257186680");
-        VolleyConnect.getInstance().connect(NekoJsonRequest.create(Util.makeHtml(AppConfig.MANGACHAPTER_URL, request, "UTF-8"), mHandler));
+       // VolleyConnect.getInstance().connect(NekoJsonRequest.create(Util.makeHtml(AppConfig.MANGACHAPTER_URL, request, "UTF-8"), mHandler));
 
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);

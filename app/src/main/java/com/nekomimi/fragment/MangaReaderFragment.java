@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.nekomimi.R;
-import com.nekomimi.net.VolleyConnect;
 import com.polites.android.GestureImageView;
 
 /**
@@ -74,7 +73,7 @@ public class MangaReaderFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         if(mImgUrl == null|| TextUtils.isEmpty(mImgUrl))
             return;
-        VolleyConnect.getInstance().getImg(mGestureImageView,mImgUrl);
+        //VolleyConnect.getInstance().getImg(mGestureImageView,mImgUrl);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

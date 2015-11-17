@@ -12,7 +12,6 @@ import com.nekomimi.R;
 import com.nekomimi.base.AppConfig;
 import com.nekomimi.base.NekoApplication;
 import com.nekomimi.bean.MangaInfo;
-import com.nekomimi.net.VolleyConnect;
 
 import java.util.List;
 
@@ -86,7 +85,7 @@ public class MangaItemRcAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ((MangaItemHolder)holder).mType_Tv.setText(mDataList.get(position).getType());
             ((MangaItemHolder)holder).mTitle_Tv.setText(mDataList.get(position).getName());
             ((MangaItemHolder)holder).mArea_Tv.setText(mDataList.get(position).getArea());
-            VolleyConnect.getInstance().getImg(((MangaItemHolder)holder).mFace_Iv, mDataList.get(position).getCoverImg(), mImgWidth, mImgHeight);
+            //VolleyConnect.getInstance().getImg(((MangaItemHolder)holder).mFace_Iv, mDataList.get(position).getCoverImg(), mImgWidth, mImgHeight);
         }
     }
 

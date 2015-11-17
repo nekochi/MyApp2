@@ -21,12 +21,8 @@ import com.nekomimi.activity.HomeActivity;
 import com.nekomimi.activity.MangaInfoActivity;
 import com.nekomimi.adapter_listener.MangaItemRcAdapter;
 import com.nekomimi.adapter_listener.RecyclerScorllListener;
-import com.nekomimi.base.AppConfig;
 import com.nekomimi.bean.MangaInfo;
-import com.nekomimi.net.NekoJsonRequest;
-import com.nekomimi.net.VolleyConnect;
 import com.nekomimi.util.JsonUtil;
-import com.nekomimi.util.Util;
 
 import org.json.JSONObject;
 
@@ -90,7 +86,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         request.put("finish","");
         request.put("key", "e00b1e6d896c4f57ae552ab257186680");
         //Util.showProgress(true, mRecycleView, mProgressView);
-        VolleyConnect.getInstance().connect(NekoJsonRequest.create(Util.makeHtml(AppConfig.MANGA_URL, request, "UTF-8"), mHandle));
+       // VolleyConnect.getInstance().connect(NekoJsonRequest.create(Util.makeHtml(AppConfig.MANGA_URL, request, "UTF-8"), mHandle));
     }
 	 @Override
 	 public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -101,9 +97,11 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
          mRecycleView = (RecyclerView)root.findViewById(R.id.mlist_rv);
          final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
          mRecycleView.setLayoutManager(layoutManager);
-         mRecycleView.addOnScrollListener(new RecyclerScorllListener() {
+         mRecycleView.addOnScrollListener(new RecyclerScorllListener()
+         {
              @Override
-             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+             public void onScrolled(RecyclerView recyclerView, int dx, int dy)
+             {
                 super.onScrolled(recyclerView,dx,dy);
                  mLastVisibleItem = layoutManager.findLastVisibleItemPosition();
              }
@@ -119,8 +117,8 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
              }
 
              @Override
-             public void onScrollStateChanged(RecyclerView recyclerView,
-                                              int newState) {
+             public void onScrollStateChanged(RecyclerView recyclerView, int newState)
+             {
                  super.onScrollStateChanged(recyclerView, newState);
                  if(mAdapter == null || mAdapter.getData() == null)
                  {

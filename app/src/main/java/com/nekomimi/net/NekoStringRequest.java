@@ -1,15 +1,11 @@
 package com.nekomimi.net;
 
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
-import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.nekomimi.base.AppConfig;
@@ -25,38 +21,18 @@ import java.util.Map;
 public class NekoStringRequest extends StringRequest
 {
     private static final String COOKIE = "Cookie";
-    private static Handler mHandler;
     private ResponseHeader mResponseHeader;
-    Map<String,String> mHeader = new HashMap<String,String>();
-    Map<String,String> mParams = new HashMap<String,String>();
+    Map<String,String> mHeader = new HashMap<>();
+    Map<String,String> mParams = new HashMap<>();
 
-    private static Response.Listener<String> mListener = new Response.Listener<String>(){
-        @Override
-        public void onResponse(String s) {
-            Log.d("onResponse", s);
-            Message msg = new Message();
-            msg.obj = s;
-            msg.what = 0;
-            mHandler.sendMessage(msg);
-        }
-    };
-    private static Response.ErrorListener mErrorListener = new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError volleyError) {
-            mHandler.sendEmptyMessage(999999);
-        }
-    };
-    public static NekoStringRequest create(String url,Handler handler)
+
+
+    public static NekoStringRequest create(int method, String url,Response.Listener listener,Response.ErrorListener errorListener,Map<String,String>map)
     {
-        return create(Method.GET,url,handler,null);
+        return new NekoStringRequest(method,url,listener,errorListener,map);
     }
-    public static NekoStringRequest create(int method, String url,Handler handler,Map<String,String>map)
-    {
-        return new NekoStringRequest(method,url,mListener,mErrorListener,handler,map);
-    }
-    public NekoStringRequest(int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener,Handler handler,Map<String,String>map) {
+    public NekoStringRequest(int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener,Map<String,String>map) {
         super(method, url, listener, errorListener);
-        this.mHandler = handler;
         this.mParams = map;
     }
 //    public NekoStringRequest(  String url, Response.Listener<String> listener, Response.ErrorListener errorListener,Handler handler) {

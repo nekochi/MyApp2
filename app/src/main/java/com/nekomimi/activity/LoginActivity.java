@@ -23,6 +23,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.nekomimi.R;
+import com.nekomimi.base.AppAction;
+import com.nekomimi.base.AppActionImpl;
 import com.nekomimi.base.AppConfig;
 import com.nekomimi.base.BaseActivity;
 import com.nekomimi.util.Util;
@@ -47,6 +49,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
      */
     private UserLoginTask mAuthTask = null;
 
+    private AppAction mAppAction = null;
     // UI references.
     private AutoCompleteTextView mAccountView;
     private EditText mPasswordView;
@@ -59,6 +62,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        mAppAction = new AppActionImpl(this);
         // Set up the login form.
         mAccountView = (AutoCompleteTextView) findViewById(R.id.account);
         mAccountView.setThreshold(1);
@@ -106,8 +110,10 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             return;
         }
 
-        if (mState.getCheckedRadioButtonId() == R.id.rb_ehentai) {
-            login(null,null);
+        if (mState.getCheckedRadioButtonId() == R.id.rb_ehentai)
+        {
+
+//            login(null,null);
         } else if (mState.getCheckedRadioButtonId() == R.id.rb_exhentai) {
             login(null,null);
         } else {

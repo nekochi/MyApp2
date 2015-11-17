@@ -25,8 +25,6 @@ import com.nekomimi.base.TestFragment;
 import com.nekomimi.bean.MangaChapterInfo;
 import com.nekomimi.bean.MangaInfo;
 import com.nekomimi.fragment.MangaInfoFragment;
-import com.nekomimi.net.NekoJsonRequest;
-import com.nekomimi.net.VolleyConnect;
 import com.nekomimi.util.JsonUtil;
 import com.nekomimi.util.Util;
 import com.squareup.picasso.Picasso;
@@ -130,7 +128,7 @@ public class MangaInfoActivity extends AppCompatActivity {
         Map<String,String> request = new HashMap<>();
         request.put("key", "e00b1e6d896c4f57ae552ab257186680");
         request.put("comicName",mMangaInfo.getName());
-        VolleyConnect.getInstance().connect( NekoJsonRequest.create(Util.makeHtml(AppConfig.MANGAINFO_URL,request,"UTF-8"),mHandler));
+       // VolleyConnect.getInstance().connect( NekoJsonRequest.create(Util.makeHtml(AppConfig.MANGAINFO_URL,request,"UTF-8"),mHandler));
     }
 
     public static void launch(AppCompatActivity activity, View transitionView,Intent intent) {
