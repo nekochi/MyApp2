@@ -44,7 +44,7 @@ public class AppConfig {
         return mAppConfig;
     }
 
-    private SharedPreferences getSharedPreferences()
+    public SharedPreferences getSharedPreferences()
     {
         if(mAppConfig == null)
         {

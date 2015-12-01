@@ -9,6 +9,8 @@ import android.widget.ImageView;
  */
 public interface AppAction
 {
+    void test(String method, Handler handler);
+
     void login(String name, String password, Handler handler);
 
     void access(Handler handler, String ...s);

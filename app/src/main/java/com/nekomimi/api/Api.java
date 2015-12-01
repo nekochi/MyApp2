@@ -12,6 +12,8 @@ import org.json.JSONObject;
  */
 public interface Api
 {
+    void test(String method, Response.Listener<JSONObject> listener,Response.ErrorListener errorListener);
+
     void login(String userName,String password,Response.Listener<String> listener,Response.ErrorListener errorListener);
 
     void access( Response.Listener<String> listener,Response.ErrorListener errorListener,String ...s);

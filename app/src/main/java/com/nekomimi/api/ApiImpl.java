@@ -21,12 +21,20 @@ public class ApiImpl implements Api
 {
     private VolleyConnect mVolleyConnect;
 
-    private static final String HOST = "http://blog.csdn.net";
-
+    private static final String TEST_HOST = "http://apis.baidu.com/acman/zhaiyanapi/tcrand";
+    private static final String HOST = "https://www.baidu.com/";
 
     public ApiImpl()
     {
         mVolleyConnect = VolleyConnect.getInstance();
+    }
+
+    @Override
+    public void test(String method, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener)
+    {
+        Map<String,String> map = new HashMap<>();
+        map.put("fangfa",method);
+        mVolleyConnect.getJsonRequest(map,TEST_HOST,listener,errorListener);
     }
 
     @Override
@@ -57,7 +65,10 @@ public class ApiImpl implements Api
     public void getMangaList(String name, String type, String skip, String finish, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener)
     {
         Map<String,String> map = new HashMap<>();
-        mVolleyConnect.getJsonRequest(map,HOST,listener,errorListener);
+        map.put("name",name);
+        map.put("type",type);
+        map.put("skip",skip);
+        mVolleyConnect.getJsonRequest(map,"",listener,errorListener);
     }
 
     @Override

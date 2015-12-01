@@ -4,11 +4,18 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 import com.nekomimi.api.Api;
 import com.nekomimi.api.ApiImpl;
+import com.nekomimi.api.ApiResponse;
+import com.nekomimi.bean.TestResponse;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 /**
@@ -23,7 +30,7 @@ public class AppActionImpl implements AppAction {
     private Response.Listener onSuccessListener;
     private Response.ErrorListener onErrorListener;
 
-
+    private static final String TEST = "Test";
     private static final String LOGIN = "Login";
     private static final String ACCESS = "Access";
     private static final String GETMANGALIST = "GetMangaList";
@@ -35,6 +42,14 @@ public class AppActionImpl implements AppAction {
     }
 
 
+    @Override
+    public void test(String method, Handler handler)
+    {
+        this.mHandler = handler;
+        this.onSuccessListener = new RespJsonListener(TEST);
+        this.onErrorListener = new ErrorListener(TEST);
+        this.mApi.test(method,onSuccessListener,onErrorListener);
+    }
 
     @Override
     public void login(String name,String password,Handler handler)
@@ -73,6 +88,10 @@ public class AppActionImpl implements AppAction {
     {
         switch (tag)
         {
+            case TEST:
+                TestResponse response = (TestResponse)((ApiResponse) msg).getObj();
+                Toast.makeText(mContext,response.getId()+response.getTaici(),Toast.LENGTH_LONG).show();
+                break;
             case LOGIN:
 
                 break;
@@ -86,7 +105,33 @@ public class AppActionImpl implements AppAction {
     }
 
 
-
+    class RespJsonListener implements Response.Listener<JSONObject>
+    {
+        private String mTag;
+        public RespJsonListener(String tag)
+        {
+            this.mTag = tag;
+        }
+        @Override
+        public void onResponse(JSONObject jsonObject) {
+            Log.e(mTag, jsonObject.toString());
+            try
+            {
+                String event = jsonObject.getString("");
+                String msg = jsonObject.getString("");
+                JSONObject obj = jsonObject.getJSONObject("");
+                ApiResponse response = new ApiResponse(event,msg);
+                Gson gson = new Gson();
+                TestResponse testResponse = gson.fromJson(obj.toString(),TestResponse.class);
+                response.setObj(testResponse);
+                handlerMessage(response,mTag);
+            }catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+            handlerMessage(jsonObject, mTag);
+        }
+    }
     class RespStrListener implements Response.Listener<String>
     {
         private String mTag;
@@ -97,9 +142,8 @@ public class AppActionImpl implements AppAction {
         @Override
         public void onResponse(String  t)
         {
-            Log.e("TAG", t);
+           // Log.e(mTag, t);
             handlerMessage(t, mTag);
-
         }
     }
 
@@ -117,11 +161,8 @@ public class AppActionImpl implements AppAction {
         }
     }
 
-    public class Callback<T>
+    public  interface  Callback<T>
     {
-        public void onResponce(boolean event,T arg)
-        {
-
-        }
+        public  void onResponce(boolean event,T arg);
     }
 }

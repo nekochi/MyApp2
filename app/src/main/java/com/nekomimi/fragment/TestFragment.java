@@ -1,35 +1,36 @@
-package com.nekomimi.base;
-
-
-import com.nekomimi.R;
-
+package com.nekomimi.fragment;
 
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.nekomimi.R;
+
 public class TestFragment extends Fragment
 {
 	private int mColor;
-	public TestFragment(String color)
+	public static TestFragment newInstance(String color)
 	{
-		mColor =  Color.parseColor(color);
+		TestFragment t = new TestFragment();
+		Bundle bundle = new Bundle();
+		bundle.putString("color",color);
+		t.setArguments(bundle);
+		return t;
 	}
+
 	public TestFragment()
 	{
-		super();
 	}
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
       
         Bundle args = getArguments();
-      //  hello = args != null ? args.getString("hello") : defaultHello;
+		this.mColor = args != null ? Color.parseColor(args.getString("color")) : Color.BLACK ;
 
     }
 	
@@ -39,6 +40,7 @@ public class TestFragment extends Fragment
 		 
 		 root.findViewById(R.id.fortest).setBackgroundColor(mColor);
 		 return root;
+
 	 }
 	@Override
     public void onDestroy() {

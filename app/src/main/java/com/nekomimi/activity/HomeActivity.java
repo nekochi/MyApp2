@@ -25,7 +25,7 @@ import android.widget.Toast;
 import com.nekomimi.R;
 import com.nekomimi.adapter_listener.MyFragmentPagerAdapter;
 import com.nekomimi.base.AppConfig;
-import com.nekomimi.base.TestFragment;
+import com.nekomimi.fragment.TestFragment;
 import com.nekomimi.fragment.HomeFragment;
 import com.nekomimi.service.NetService;
 
@@ -92,9 +92,9 @@ public class HomeActivity extends AppCompatActivity {
 		mViewPager = (ViewPager)findViewById(R.id.vp_pager);
 		HomeFragment fragment1 = new HomeFragment();
 //		TestFragment fragment1 = new TestFragment("#FF0000");
-		TestFragment fragment2 = new TestFragment("#00FF00");
-		TestFragment fragment3 = new TestFragment("#0000FF");
-		TestFragment fragment4 = new TestFragment("#000000");
+		TestFragment fragment2 = TestFragment.newInstance("#FF0000");
+		TestFragment fragment3 = TestFragment.newInstance("#0000FF");
+		TestFragment fragment4 = TestFragment.newInstance("#000000");
 		mFragmentList = new ArrayList<Fragment>();
 		mFragmentList.add(fragment1);
 		mFragmentList.add(fragment2);
@@ -102,12 +102,14 @@ public class HomeActivity extends AppCompatActivity {
 		mFragmentList.add(fragment4);
 		final MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
 		adapter.addFrag(mFragmentList.get(0),"Home");
-		adapter.addFrag(mFragmentList.get(1),"Search");
+		adapter.addFrag(mFragmentList.get(1), "Search");
 		adapter.addFrag(mFragmentList.get(2), "Star");
 		adapter.addFrag(mFragmentList.get(3), "Me");
 		mViewPager.setOffscreenPageLimit(3);
 		mViewPager.setAdapter(adapter);
 		mTabLayout.setupWithViewPager(mViewPager);
+
+
 		mTestBt = (Button)findViewById(R.id.test_bt);
 		if(Build.VERSION.SDK_INT>=21)
 		{

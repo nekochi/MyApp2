@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener
+public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener
 {
    // private Button mTestBt = null;
     private RecyclerView mRecycleView = null;

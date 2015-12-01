@@ -21,7 +21,7 @@ import android.widget.LinearLayout;
 import com.nekomimi.R;
 import com.nekomimi.adapter_listener.MyFragmentPagerAdapter;
 import com.nekomimi.base.AppConfig;
-import com.nekomimi.base.TestFragment;
+import com.nekomimi.fragment.TestFragment;
 import com.nekomimi.bean.MangaChapterInfo;
 import com.nekomimi.bean.MangaInfo;
 import com.nekomimi.fragment.MangaInfoFragment;
@@ -102,8 +102,8 @@ public class MangaInfoActivity extends AppCompatActivity {
 
         final MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
         mFragments = new ArrayList<>();
-        mFragments.add(new TestFragment("#026719"));
-        mFragments.add(new TestFragment("#acf233"));
+        mFragments.add(TestFragment.newInstance("#026719"));
+        mFragments.add(TestFragment.newInstance("#acf233"));
         adapter.addFrag(mFragments.get(0), "info");
         adapter.addFrag(mFragments.get(1), "comment");
         mViewPager.setAdapter(adapter);

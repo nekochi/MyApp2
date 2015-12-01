@@ -56,7 +56,10 @@ public class Util {
         else if(parseAccount(pre).contains(value))
         {
             return pre;
-        }
+        }else if(value == null || value.isEmpty())
+        {
+            return  pre;
+        }else
         {
             return pre + value + ";";
         }

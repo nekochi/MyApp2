@@ -46,7 +46,6 @@ public class NekoStringRequest extends StringRequest
         mHeader.put(AppConfig.USERAGENT,AppConfig.getInstance().getUserAgent());
         mHeader.put(AppConfig.COOKIE,AppConfig.getInstance().getCookie());
         mHeader.put("Connection","keep-alive");
-
         return mHeader;
     }
    @Override

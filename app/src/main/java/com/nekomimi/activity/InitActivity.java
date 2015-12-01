@@ -10,7 +10,7 @@ import android.view.Display;
 
 import com.nekomimi.R;
 import com.nekomimi.base.AppConfig;
-import com.nekomimi.base.NImageCache;
+import com.nekomimi.net.NImageCache;
 import com.nekomimi.service.NetService;
 import com.nekomimi.util.Util;
 

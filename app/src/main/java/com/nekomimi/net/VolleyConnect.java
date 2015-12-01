@@ -9,7 +9,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.nekomimi.base.AppActionImpl;
-import com.nekomimi.base.NImageCache;
 import com.nekomimi.base.NekoApplication;
 
 import org.json.JSONObject;
@@ -84,10 +83,14 @@ public class VolleyConnect
             {
                 if(imageContainer.getBitmap()!=null)
                 {
-                    view.setImageBitmap(imageContainer.getBitmap());
+                    if(view!=null)
+                    {
+                        view.setImageBitmap(imageContainer.getBitmap());
+                    }
+                    if(callback!=null)
+                        callback.onResponce(true,null);
                 }
-                if(callback!=null)
-                    callback.onResponce(true,null);
+
             }
 
             @Override

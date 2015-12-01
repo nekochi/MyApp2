@@ -10,31 +10,32 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nekomimi.R;
+import com.nekomimi.view.DividerItemDecoration;
 
 /**
  * Created by hongchi on 2015-10-15.
  */
 public class SettingFragment extends Fragment {
 
+
     private int mFlag;
     private String[] mDataString;
     private OnSelectedListener mListener;
 
     private RecyclerView mSettingRv;
-    public static SettingFragment create(String[] str,int flag)
+    public static SettingFragment create( String[] str,int flag)
     {
         SettingFragment settingFragment = new SettingFragment();
         Bundle bundle = new Bundle();
-        bundle.putStringArray("data",str);
+        bundle.putStringArray("data", str);
         bundle.putInt("type",flag);
         settingFragment.setArguments(bundle);
         return settingFragment;
     }
 
-    public SettingFragment()
-    {
+    public SettingFragment(){}
 
-    }
+
 
 
     @Override
@@ -55,6 +56,7 @@ public class SettingFragment extends Fragment {
         mSettingRv = (RecyclerView)root.findViewById(R.id.rv_setting);
         mSettingRv.setLayoutManager(new LinearLayoutManager(getActivity()));
         mSettingRv.setAdapter(new SettingItemAdapter(mDataString));
+        mSettingRv.addItemDecoration( new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL_LIST));
 
 
         return root;
@@ -115,4 +117,7 @@ public class SettingFragment extends Fragment {
         }
 
     }
+
+
+
 }

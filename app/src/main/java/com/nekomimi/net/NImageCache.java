@@ -1,10 +1,11 @@
-package com.nekomimi.base;
+package com.nekomimi.net;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.LruCache;
 
 import com.android.volley.toolbox.ImageLoader;
+import com.nekomimi.base.NekoApplication;
 import com.nekomimi.util.DiskLruCache;
 import com.nekomimi.util.Util;
 

@@ -19,14 +19,14 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nekomimi.R;
-import com.nekomimi.base.AppAction;
 import com.nekomimi.base.AppActionImpl;
 import com.nekomimi.base.AppConfig;
-import com.nekomimi.base.BaseActivity;
 import com.nekomimi.util.Util;
 
 import java.util.ArrayList;
@@ -37,6 +37,7 @@ import java.util.List;
  */
 public class LoginActivity extends BaseActivity implements LoaderCallbacks<Cursor> {
 
+    private static final String TAG = "LoginActivity";
     /**
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
@@ -49,7 +50,6 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
      */
     private UserLoginTask mAuthTask = null;
 
-    private AppAction mAppAction = null;
     // UI references.
     private AutoCompleteTextView mAccountView;
     private EditText mPasswordView;
@@ -58,11 +58,10 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
     private Button mSignInButton;
     private RadioGroup mState;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mAppAction = new AppActionImpl(this);
         // Set up the login form.
         mAccountView = (AutoCompleteTextView) findViewById(R.id.account);
         mAccountView.setThreshold(1);
@@ -112,7 +111,13 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
 
         if (mState.getCheckedRadioButtonId() == R.id.rb_ehentai)
         {
-
+            getAction().getImg("http://www.uml.org.cn/mobiledev/images/2013102116.png", (ImageView)findViewById(R.id.test_iv), new AppActionImpl.Callback<Void>() {
+                @Override
+                public void onResponce(boolean event, Void arg) {
+                    if(event)
+                        Toast.makeText(getContext(),"success",Toast.LENGTH_SHORT).show();
+                }
+            }, 0, 0);
 //            login(null,null);
         } else if (mState.getCheckedRadioButtonId() == R.id.rb_exhentai) {
             login(null,null);
