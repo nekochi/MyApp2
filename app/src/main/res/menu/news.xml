@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/abc_ic_search_api_mtrl_alpha"
+        android:title="@string/search_toolbar_view"
+        app:showAsAction="ifRoom|collapseActionView"
+        android:actionViewClass="android.support.v7.widget.SearchView"
+        android:inputType="textCapWords"
+        android:imeOptions="actionSearch">
+
+    </item>
+    <item
+        android:icon="@android:drawable/stat_notify_sync"
+        android:id="@+id/action_fresh"
+        android:title="@string/refresh_toolbar_view"
+        app:showAsAction="always"/>
+
+
+</menu>
