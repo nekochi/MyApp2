@@ -60,6 +60,9 @@
             android:label="@string/title_activity_mangaReader"
             android:theme="@style/MangaReader">
         </activity>
+        <activity android:name=".activity.NewsActivity"
+            android:label="@string/title_activity_news">
+        </activity>
         <service android:enabled="true" android:name=".service.NetService" />
     </application>
 

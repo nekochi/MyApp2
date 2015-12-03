@@ -21,7 +21,6 @@ public class ApiImpl implements Api
 {
     private VolleyConnect mVolleyConnect;
 
-    private static final String TEST_HOST = "http://apis.baidu.com/acman/zhaiyanapi/tcrand";
     private static final String HOST = "https://www.baidu.com/";
 
     public ApiImpl()
@@ -29,13 +28,6 @@ public class ApiImpl implements Api
         mVolleyConnect = VolleyConnect.getInstance();
     }
 
-    @Override
-    public void test(String method, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener)
-    {
-        Map<String,String> map = new HashMap<>();
-        map.put("fangfa",method);
-        mVolleyConnect.getJsonRequest(map,TEST_HOST,listener,errorListener);
-    }
 
     @Override
     public void login(String userName,String password,Response.Listener<String> listener,Response.ErrorListener errorListener)
@@ -69,6 +61,17 @@ public class ApiImpl implements Api
         map.put("type",type);
         map.put("skip",skip);
         mVolleyConnect.getJsonRequest(map,"",listener,errorListener);
+    }
+
+    @Override
+    public void getNews(String channelId, String channelName, String title, String page, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener)
+    {
+        Map<String,String> map = new HashMap<>();
+        map.put("channelId",channelId!=null?channelId:"5572a109b3cdc86cf39001db");
+        map.put("channelName",channelName!=null?channelName:"国内最新");
+        map.put("title",title!=null?title:"");
+        map.put("page",page!=null?page:"1");
+        mVolleyConnect.getJsonRequest(map,"http://apis.baidu.com/showapi_open_bus/channel_news/search_news",listener,errorListener);
     }
 
     @Override

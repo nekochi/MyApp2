@@ -6,9 +6,9 @@ import android.util.Log;
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
-import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.nekomimi.base.AppConfig;
 
 import org.json.JSONException;
@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * Created by hongchi on 2015-9-1.
  */
-public class NekoJsonRequest extends Request<JSONObject>
+public class NekoJsonRequest extends JsonObjectRequest
 {
     public static final String TAG = "NekoJsonRequest";
 
@@ -36,7 +36,7 @@ public class NekoJsonRequest extends Request<JSONObject>
     }
     private NekoJsonRequest(int method, String url,Response.Listener<JSONObject> listener,Response.ErrorListener errorListener,Map<String,String> params)
     {
-        super(method, url, errorListener);
+        super(method, url,null,listener,errorListener);
         mParams = params;
         mListener = listener;
         

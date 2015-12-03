@@ -10,6 +10,8 @@ public class ApiResponse<T>
     private String msg;
     private T obj;
 
+    public ApiResponse(){}
+
     public ApiResponse(String event, String msg) {
         this.event = event;
         this.msg = msg;

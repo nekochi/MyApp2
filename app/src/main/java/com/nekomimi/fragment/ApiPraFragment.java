@@ -1,18 +1,19 @@
 package com.nekomimi.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.nekomimi.R;
+import com.nekomimi.activity.NewsActivity;
 
 /**
  * Created by hongchi on 2015-11-30.
  * File description :
  */
-public class ApiPraFragment extends Fragment implements View.OnClickListener
+public class ApiPraFragment extends BaseFragment implements View.OnClickListener
 {
 
     @Override
@@ -37,7 +38,8 @@ public class ApiPraFragment extends Fragment implements View.OnClickListener
         switch (v.getId())
         {
             case R.id.news:
-
+                Intent intent = new Intent(getContext(), NewsActivity.class);
+                startActivity(intent);
                 break;
             default:
                 break;

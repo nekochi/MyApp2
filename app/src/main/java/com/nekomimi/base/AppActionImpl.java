@@ -2,19 +2,19 @@ package com.nekomimi.base;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.nekomimi.api.Api;
 import com.nekomimi.api.ApiImpl;
 import com.nekomimi.api.ApiResponse;
-import com.nekomimi.bean.TestResponse;
+import com.nekomimi.bean.NewsInfo;
+import com.nekomimi.util.JsonUtil;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 
@@ -30,10 +30,11 @@ public class AppActionImpl implements AppAction {
     private Response.Listener onSuccessListener;
     private Response.ErrorListener onErrorListener;
 
-    private static final String TEST = "Test";
+
     private static final String LOGIN = "Login";
     private static final String ACCESS = "Access";
     private static final String GETMANGALIST = "GetMangaList";
+    private static final String NEWSLIST = "NewsList";
 
     public AppActionImpl(Context context)
     {
@@ -41,15 +42,6 @@ public class AppActionImpl implements AppAction {
         this.mApi = new ApiImpl();
     }
 
-
-    @Override
-    public void test(String method, Handler handler)
-    {
-        this.mHandler = handler;
-        this.onSuccessListener = new RespJsonListener(TEST);
-        this.onErrorListener = new ErrorListener(TEST);
-        this.mApi.test(method,onSuccessListener,onErrorListener);
-    }
 
     @Override
     public void login(String name,String password,Handler handler)
@@ -78,6 +70,15 @@ public class AppActionImpl implements AppAction {
     }
 
     @Override
+    public void getNews(Handler handler)
+    {
+        this.mHandler = handler;
+        this.onSuccessListener = new RespJsonListener(NEWSLIST);
+        this.onErrorListener = new ErrorListener(NEWSLIST);
+        this.mApi.getNews(null,null,null,null,onSuccessListener,onErrorListener);
+    }
+
+    @Override
     public void getImg( String url, ImageView imageView,Callback<Void> callback,int height,int width)
     {
         this.mApi.getImg(url,imageView,callback,height,width);
@@ -88,9 +89,13 @@ public class AppActionImpl implements AppAction {
     {
         switch (tag)
         {
-            case TEST:
-                TestResponse response = (TestResponse)((ApiResponse) msg).getObj();
-                Toast.makeText(mContext,response.getId()+response.getTaici(),Toast.LENGTH_LONG).show();
+            case NEWSLIST:
+                ApiResponse<NewsInfo> response = JsonUtil.toApiRes((JSONObject)msg,new TypeToken<NewsInfo>(){}.getType());
+                NewsInfo info = response.getObj();
+                Message message = new Message();
+                message.what = 0;
+                message.obj = info;
+                mHandler.sendMessage(message);
                 break;
             case LOGIN:
 
@@ -115,20 +120,6 @@ public class AppActionImpl implements AppAction {
         @Override
         public void onResponse(JSONObject jsonObject) {
             Log.e(mTag, jsonObject.toString());
-            try
-            {
-                String event = jsonObject.getString("");
-                String msg = jsonObject.getString("");
-                JSONObject obj = jsonObject.getJSONObject("");
-                ApiResponse response = new ApiResponse(event,msg);
-                Gson gson = new Gson();
-                TestResponse testResponse = gson.fromJson(obj.toString(),TestResponse.class);
-                response.setObj(testResponse);
-                handlerMessage(response,mTag);
-            }catch (JSONException e)
-            {
-                e.printStackTrace();
-            }
             handlerMessage(jsonObject, mTag);
         }
     }
@@ -142,7 +133,6 @@ public class AppActionImpl implements AppAction {
         @Override
         public void onResponse(String  t)
         {
-           // Log.e(mTag, t);
             handlerMessage(t, mTag);
         }
     }

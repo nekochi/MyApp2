@@ -150,7 +150,7 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                  }
              }
          });
-         mProgressView = root.findViewById(R.id.home_progress);
+        // mProgressView = root.findViewById(R.id.home_progress);
          onRefresh();
 
 

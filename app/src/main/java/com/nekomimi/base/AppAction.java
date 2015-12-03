@@ -9,13 +9,13 @@ import android.widget.ImageView;
  */
 public interface AppAction
 {
-    void test(String method, Handler handler);
-
     void login(String name, String password, Handler handler);
 
     void access(Handler handler, String ...s);
 
     void getMangaInfo(Handler handler);
+
+    void getNews(Handler handler);
 
     void getImg( String url, ImageView imageView,AppActionImpl.Callback<Void> callback,int height,int width);
 }

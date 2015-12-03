@@ -12,13 +12,15 @@ import org.json.JSONObject;
  */
 public interface Api
 {
-    void test(String method, Response.Listener<JSONObject> listener,Response.ErrorListener errorListener);
-
     void login(String userName,String password,Response.Listener<String> listener,Response.ErrorListener errorListener);
 
     void access( Response.Listener<String> listener,Response.ErrorListener errorListener,String ...s);
 
     void getMangaList( String name, String type, String skip, String finish,Response.Listener<JSONObject> listener,Response.ErrorListener errorListener );
 
+    void getNews( String channelId, String channelName, String title, String page, Response.Listener<JSONObject> listener,Response.ErrorListener errorListener);
+
     void getImg(String url,ImageView view,AppActionImpl.Callback<Void> callback,int height,int width);
+
+
 }

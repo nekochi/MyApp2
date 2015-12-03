@@ -1,5 +1,7 @@
 package com.nekomimi.util;
 
+import com.google.gson.Gson;
+import com.nekomimi.api.ApiResponse;
 import com.nekomimi.bean.MangaChapterInfo;
 import com.nekomimi.bean.MangaImgInfo;
 import com.nekomimi.bean.MangaInfo;
@@ -8,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,5 +89,26 @@ public class JsonUtil {
 
 
         return result;
+    }
+
+    public  static  ApiResponse toApiRes(JSONObject object,Type type)
+    {
+        String event = "";
+        String msg = "";
+        String obj = "";
+        try {
+            event = object.getString("showapi_res_code");
+            msg = object.getString("showapi_res_error");
+            obj = object.getJSONObject("showapi_res_body").toString();
+        }catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+        Gson gson = new Gson();
+        ApiResponse response = new ApiResponse();
+        response.setEvent(event);
+        response.setMsg(msg);
+        response.setObj(gson.fromJson(obj,type));
+        return response;
     }
 }
