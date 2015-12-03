@@ -11,29 +11,55 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:padding="5dp"
         android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/abc_text_size_title_material"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            style="@style/Text_Black"
             android:id="@+id/tv_newstitle"
             android:singleLine="true"
             android:ellipsize="end"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@drawable/divider_bg">
-
-        </View>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/abc_text_size_body_1_material"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            style="@style/Text_Black"
             android:id="@+id/tv_newsbody"
             android:maxLines="2"
             android:ellipsize="end"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/divider_bg"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp">
+
+        </View>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ll_moreinfo"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/tv_newssource"
+                style="@style/Text_Black"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center|start" />
+            <TextView
+                android:id="@+id/tv_newspubdate"
+                style="@style/Text_Black"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end|center" />
+        </LinearLayout>
 
     </LinearLayout>
 

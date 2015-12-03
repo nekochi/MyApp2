@@ -39,4 +39,10 @@
 
     <!-- Strings related to MangaReader -->
     <string name="title_activity_mangaReader">MangaReader</string>
+
+
+    <!-- Strings related to NewsActivity -->
+    <string name="title_activity_news">News</string>
+
+    <string name="search_toolbar_view">Search</string>
 </resources>
