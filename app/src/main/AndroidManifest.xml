@@ -61,7 +61,13 @@
             android:theme="@style/MangaReader">
         </activity>
         <activity android:name=".activity.NewsActivity"
+            android:launchMode="singleTop"
             android:label="@string/title_activity_news">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH"/>
+            </intent-filter>
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
         <service android:enabled="true" android:name=".service.NetService" />
     </application>

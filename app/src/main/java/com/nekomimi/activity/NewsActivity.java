@@ -1,5 +1,8 @@
 package com.nekomimi.activity;
 
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,7 +11,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,12 +68,28 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         mSwipeRefreshLayout.setColorSchemeColors(Color.BLUE);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new NewsAdapter();
+        handleSearchIntent(getIntent());
+    }
 
+    private void handleSearchIntent(Intent intent)
+    {
+        if(Intent.ACTION_SEARCH.equals(intent.getAction()))
+        {
+            String key = intent.getStringExtra(SearchManager.QUERY);
+            Toast.makeText(this,key,Toast.LENGTH_LONG).show();
+        }
     }
 
     public void getNews()
     {
         getAction().getNews(mHandler);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent)
+    {
+        super.onNewIntent(intent);
+        handleSearchIntent(intent);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
@@ -84,6 +103,8 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                 Toast.makeText(this,"search",Toast.LENGTH_LONG).show();
                 break;
             case R.id.action_fresh:
+                mRecyclerView.scrollToPosition(0);
+                mSwipeRefreshLayout.setRefreshing(true);
                 onRefresh();
                 break;
             default:
@@ -98,7 +119,10 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.news,menu);
         MenuItem menuItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView)MenuItemCompat.getActionView(menuItem);
+        SearchView searchView =  (SearchView) menuItem.getActionView();
+
+        SearchManager searchManager= (SearchManager)getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         MenuItemCompat.setOnActionExpandListener(menuItem, new MenuItemCompat.OnActionExpandListener() {//设置打开关闭动作监听
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
@@ -114,7 +138,7 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         });
 
 
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
     @Override
     public void onRefresh()

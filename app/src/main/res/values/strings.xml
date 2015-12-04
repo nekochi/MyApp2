@@ -46,4 +46,5 @@
 
     <string name="search_toolbar_view">Search</string>
     <string name="refresh_toolbar_view">Refresh</string>
+    <string name="searchview_hint">search news title</string>
 </resources>

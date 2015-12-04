@@ -11,7 +11,6 @@ import android.view.Display;
 import com.nekomimi.R;
 import com.nekomimi.base.AppConfig;
 import com.nekomimi.net.NImageCache;
-import com.nekomimi.service.NetService;
 import com.nekomimi.util.Util;
 
 /**
@@ -26,8 +25,8 @@ public class InitActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_init);
         mAppConfig = AppConfig.getInstance();
-        Intent intent = new Intent(this, NetService.class);
-        startService(intent);
+//        Intent intent = new Intent(this, NetService.class);
+//        startService(intent);
         InitTask task = new InitTask();
         task.execute((Void)null);
     }
