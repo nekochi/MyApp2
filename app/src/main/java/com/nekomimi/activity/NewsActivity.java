@@ -12,6 +12,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,6 +33,8 @@ import com.nekomimi.bean.NewsInfo;
  */
 public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener
 {
+    public static final String TAG = "NewsActivity";
+
     private Toolbar mToolbar;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -61,7 +64,7 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
 
         mToolbar = (Toolbar)findViewById(R.id.toolbar_news);
         setSupportActionBar(mToolbar);
-        getNews();
+        getAction().getNews(mHandler);
         mRecyclerView = (RecyclerView)findViewById(R.id.rv_newslist);
         mSwipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.srl_refresh);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -76,20 +79,21 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         if(Intent.ACTION_SEARCH.equals(intent.getAction()))
         {
             String key = intent.getStringExtra(SearchManager.QUERY);
-            Toast.makeText(this,key,Toast.LENGTH_LONG).show();
+            Log.e(TAG,"title:"+key);
+            getAction().getNews(mHandler,key);
+            mSwipeRefreshLayout.setRefreshing(true);
+            mRecyclerView.scrollToPosition(0);
         }
     }
 
-    public void getNews()
-    {
-        getAction().getNews(mHandler);
-    }
+
 
     @Override
     protected void onNewIntent(Intent intent)
     {
         super.onNewIntent(intent);
         handleSearchIntent(intent);
+
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
@@ -100,7 +104,6 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                 finish();
                 return true;
             case R.id.action_search:
-                Toast.makeText(this,"search",Toast.LENGTH_LONG).show();
                 break;
             case R.id.action_fresh:
                 mRecyclerView.scrollToPosition(0);
@@ -118,32 +121,41 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.news,menu);
-        MenuItem menuItem = menu.findItem(R.id.action_search);
-        SearchView searchView =  (SearchView) menuItem.getActionView();
+        final MenuItem menuItem = menu.findItem(R.id.action_search);
+
+        final SearchView searchView =  (SearchView) menuItem.getActionView();
 
         SearchManager searchManager= (SearchManager)getSystemService(Context.SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
         MenuItemCompat.setOnActionExpandListener(menuItem, new MenuItemCompat.OnActionExpandListener() {//设置打开关闭动作监听
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
-                Toast.makeText(NewsActivity.this, "onExpand", Toast.LENGTH_LONG).show();
+                Toast.makeText(NewsActivity.this, "onExpand", Toast.LENGTH_SHORT).show();
+                searchView.setIconified(false);
                 return true;
             }
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                Toast.makeText(NewsActivity.this, "Collapse", Toast.LENGTH_LONG).show();
+                Toast.makeText(NewsActivity.this, "Collapse", Toast.LENGTH_SHORT).show();
+
                 return true;
             }
         });
-
-
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                menuItem.collapseActionView();
+                return false;
+            }
+        });
         return true;
     }
     @Override
     public void onRefresh()
     {
-        getNews();
+        getAction().getNews(mHandler);
     }
 
     class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>

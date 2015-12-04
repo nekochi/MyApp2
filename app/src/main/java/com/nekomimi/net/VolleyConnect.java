@@ -1,5 +1,6 @@
 package com.nekomimi.net;
 
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.android.volley.Request;
@@ -59,6 +60,7 @@ public class VolleyConnect
 
     public void getJsonRequest(Map<String,String> params ,String url,Response.Listener<JSONObject> listener,Response.ErrorListener errorListener)
     {
+        Log.e("getJsonRequest",params.toString());
         jsonRequest(GET, params, url, listener, errorListener, null);
     }
     public void postJsonRequest(Map<String,String> params ,String url,Response.Listener<JSONObject> listener

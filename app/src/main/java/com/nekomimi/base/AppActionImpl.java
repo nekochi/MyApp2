@@ -72,10 +72,16 @@ public class AppActionImpl implements AppAction {
     @Override
     public void getNews(Handler handler)
     {
+        getNews(handler,null);
+    }
+
+    @Override
+    public void getNews(Handler handler, String title)
+    {
         this.mHandler = handler;
         this.onSuccessListener = new RespJsonListener(NEWSLIST);
         this.onErrorListener = new ErrorListener(NEWSLIST);
-        this.mApi.getNews(null,null,null,null,onSuccessListener,onErrorListener);
+        this.mApi.getNews(null,"",title,null,onSuccessListener,onErrorListener);
     }
 
     @Override

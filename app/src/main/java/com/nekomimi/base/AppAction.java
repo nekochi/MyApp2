@@ -17,5 +17,7 @@ public interface AppAction
 
     void getNews(Handler handler);
 
+    void getNews(Handler handler, String title);
+
     void getImg( String url, ImageView imageView,AppActionImpl.Callback<Void> callback,int height,int width);
 }
