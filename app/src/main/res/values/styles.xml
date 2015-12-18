@@ -23,4 +23,12 @@
     <style name="Text_Black">
         <item name="android:textColor">#000</item>
     </style>
+
+    <style name="nav_footer_button">
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:textColor">@color/abc_primary_text_material_light</item>
+        <item name="android:background">@drawable/abc_btn_borderless_material</item>
+    </style>
 </resources>

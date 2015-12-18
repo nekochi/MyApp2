@@ -20,14 +20,15 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.nekomimi.R;
 import com.nekomimi.adapter_listener.MyFragmentPagerAdapter;
 import com.nekomimi.base.AppConfig;
 import com.nekomimi.fragment.ApiPraFragment;
-import com.nekomimi.fragment.TestFragment;
 import com.nekomimi.fragment.HomeFragment;
+import com.nekomimi.fragment.TestFragment;
 import com.nekomimi.service.NetService;
 
 import java.util.ArrayList;
@@ -44,7 +45,10 @@ public class HomeActivity extends AppCompatActivity {
 	private DrawerLayout mDrawerLayout;
 	private TabLayout mTabLayout;
 	private Button mTestBt;
+	private ImageView mFaceIv;
+	private Button mSettingBt;
 
+	private boolean mFlag = false;
 	private boolean mIfQuit = false;
 	private int mFloatBtMargin ;
 	private Handler mHandler = new Handler()
@@ -68,7 +72,22 @@ public class HomeActivity extends AppCompatActivity {
 		mTabLayout = (TabLayout)findViewById(R.id.toptab);
 
 		mDrawerLayout = (DrawerLayout)findViewById(R.id.drawerLayout);
-		mActionBarDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout,toolbar,R.string.open,R.string.close);
+		mActionBarDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout,toolbar,R.string.open,R.string.close)
+		{
+			@Override
+			public void onDrawerClosed(View drawerView)
+			{
+				super.onDrawerClosed(drawerView);
+				mFlag = false;
+			}
+			@Override
+			public void onDrawerOpened(View drawerView)
+			{
+				super.onDrawerOpened(drawerView);
+				mFlag = true;
+			}
+		};
+		mActionBarDrawerToggle.syncState();
 		mActionBarDrawerToggle.syncState();
 		mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
@@ -76,19 +95,26 @@ public class HomeActivity extends AppCompatActivity {
 		mNavTab.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 			@Override
 			public boolean onNavigationItemSelected(MenuItem menuItem) {
-				switch (menuItem.getItemId())
-				{
-					case R.id.drawer_setting:
-						Intent intent = new Intent(HomeActivity.this,SettingActivity.class);
-						startActivity(intent);
-						break;
+				switch (menuItem.getItemId()) {
+
 					default:
 						break;
 				}
 				return false;
 			}
 		});
-
+		mFaceIv = (ImageView)findViewById(R.id.iv_face);
+		mSettingBt = (Button)findViewById(R.id.drawer_setting);
+		mSettingBt.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (v.getId() == R.id.drawer_setting)
+				{
+					Intent intent = new Intent(HomeActivity.this, SettingActivity.class);
+					startActivity(intent);
+				}
+			}
+		});
 		//mTopTab = (TopTabView)findViewById(R.id.toptab);
 		mViewPager = (ViewPager)findViewById(R.id.vp_pager);
 		HomeFragment fragment1 = new HomeFragment();
@@ -131,7 +157,8 @@ public class HomeActivity extends AppCompatActivity {
 			}
 		});
 
-		hideFloatBt();
+
+//		hideFloatBt();
 	}
 	
 
@@ -161,8 +188,12 @@ public class HomeActivity extends AppCompatActivity {
 	@Override
 	public void onBackPressed()
 	{
-		Log.d("TAG",String.valueOf(mIfQuit));
-		if(mIfQuit)
+		if(mFlag)
+		{
+			mDrawerLayout.closeDrawers();
+		}
+
+		else if(mIfQuit)
 		{
 			Intent intent = new Intent(this, NetService.class);
 			stopService(intent);
@@ -194,4 +225,6 @@ public class HomeActivity extends AppCompatActivity {
 		mTestBt.animate().alpha(0);
 		mTestBt.animate().translationY(mTestBt.getHeight() + mFloatBtMargin).setInterpolator(new AccelerateInterpolator(2)).start();
 	}
+
+
 }

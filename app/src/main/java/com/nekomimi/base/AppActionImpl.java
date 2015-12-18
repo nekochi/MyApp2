@@ -13,6 +13,7 @@ import com.nekomimi.api.Api;
 import com.nekomimi.api.ApiImpl;
 import com.nekomimi.api.ApiResponse;
 import com.nekomimi.bean.NewsInfo;
+import com.nekomimi.net.VolleyConnect;
 import com.nekomimi.util.JsonUtil;
 
 import org.json.JSONObject;
@@ -87,19 +88,22 @@ public class AppActionImpl implements AppAction {
     @Override
     public void getImg( String url, ImageView imageView,Callback<Void> callback,int height,int width)
     {
-        this.mApi.getImg(url,imageView,callback,height,width);
+        VolleyConnect.getInstance().getImg(url,imageView,callback,height,width);
+//        this.mApi.getImg(url,imageView,callback,height,width);
     }
 
 
     private <T> void handlerMessage(T msg,String tag)
     {
+        Log.d("AppAction", "AppAction thread id is " + Thread.currentThread().getId());
         switch (tag)
         {
             case NEWSLIST:
                 ApiResponse<NewsInfo> response = JsonUtil.toApiRes((JSONObject)msg,new TypeToken<NewsInfo>(){}.getType());
                 NewsInfo info = response.getObj();
                 Message message = new Message();
-                message.what = 0;
+                message.what = Integer.valueOf(response.getEvent());
+
                 message.obj = info;
                 mHandler.sendMessage(message);
                 break;

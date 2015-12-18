@@ -6,7 +6,16 @@
             android:title="first title"/>
         <item android:title="second title"
             android:id="@+id/nav_menu_2"/>
-        <item android:title="setting"
-            android:id="@+id/drawer_setting"/>
+        <item android:title="3th title"
+            android:id="@+id/nav_menu_3"/>
+        <item android:title="4th title"
+            android:id="@+id/nav_menu_4"/>
+        <item android:title="5th title"
+            android:id="@+id/nav_menu_5"/>
+        <item android:title="6th title"
+            android:id="@+id/nav_menu_6"/>
+        <item android:title="7th title"
+            android:id="@+id/nav_menu_7"/>
+
     </group>
 </menu>
