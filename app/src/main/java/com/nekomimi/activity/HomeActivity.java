@@ -64,11 +64,25 @@ public class HomeActivity extends AppCompatActivity {
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
+
 		toolbar = (Toolbar)findViewById(R.id.toolbar);
 //		toolbar.setTitleTextColor(Color.WHITE);
 		mFloatBtMargin = AppConfig.mScanHeight / 32;
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		initView();
+		initViewpager();
+
+
+
+
+
+
+//		hideFloatBt();
+	}
+	
+	private void initView()
+	{
 		mTabLayout = (TabLayout)findViewById(R.id.toptab);
 
 		mDrawerLayout = (DrawerLayout)findViewById(R.id.drawerLayout);
@@ -117,6 +131,30 @@ public class HomeActivity extends AppCompatActivity {
 		});
 		//mTopTab = (TopTabView)findViewById(R.id.toptab);
 		mViewPager = (ViewPager)findViewById(R.id.vp_pager);
+
+		mTestBt = (Button)findViewById(R.id.test_bt);
+		if(Build.VERSION.SDK_INT>=21)
+		{
+			mTestBt.setBackground(getBaseContext().getResources().getDrawable(R.drawable.fab_selector_v21));
+		}
+		else
+		{
+			mTestBt.setBackground(getBaseContext().getResources().getDrawable(R.drawable.fab_selector));
+		}
+
+
+		mTestBt.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				final MyFragmentPagerAdapter adapter = (MyFragmentPagerAdapter)mViewPager.getAdapter();
+				((HomeFragment)adapter.getItem(0)).scrollToTop();
+				Log.e(TAG,mViewPager.getHeight()+"");
+			}
+		});
+	}
+
+	private void initViewpager()
+	{
 		HomeFragment fragment1 = new HomeFragment();
 		ApiPraFragment fragment2 = new ApiPraFragment();
 //		TestFragment fragment1 = new TestFragment("#FF0000");
@@ -136,32 +174,7 @@ public class HomeActivity extends AppCompatActivity {
 		mViewPager.setOffscreenPageLimit(3);
 		mViewPager.setAdapter(adapter);
 		mTabLayout.setupWithViewPager(mViewPager);
-
-
-		mTestBt = (Button)findViewById(R.id.test_bt);
-		if(Build.VERSION.SDK_INT>=21)
-		{
-			mTestBt.setBackground(getBaseContext().getResources().getDrawable(R.drawable.fab_selector_v21));
-		}
-		else
-		{
-			mTestBt.setBackground(getBaseContext().getResources().getDrawable(R.drawable.fab_selector));
-		}
-
-
-		mTestBt.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				((HomeFragment)adapter.getItem(0)).scrollToTop();
-				Log.e(TAG,mViewPager.getHeight()+"");
-			}
-		});
-
-
-//		hideFloatBt();
 	}
-	
-
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)

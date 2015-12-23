@@ -23,6 +23,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,21 +48,15 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private NewsAdapter mAdapter;
     private NewsInfo mData = null;
+    private List<NewsInfo.News> mNewsList = new ArrayList<>();
+    private List<NewsInfo.News> mHeaderDataList = new ArrayList<>();
+    private NewsAdapter.SimpleAdapter mSimpleAdapter;
 
-    private Handler mHandler = new Handler()
-    {
-        @Override
-        public void handleMessage(Message msg)
-        {
-            if (msg.what == 0)
-            {
-                mSwipeRefreshLayout.setRefreshing(false);
-                mData = (NewsInfo) msg.obj;
-                mRecyclerView.setAdapter(mAdapter);
-                mAdapter.notifyDataSetChanged();
-            }
-        }
-    };
+
+
+    private String mTitle;
+    private int mPage;
+    private int mAllPage;
 
     @Override
     public void onCreate(Bundle saveInstanceState)
@@ -71,15 +66,39 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
 
         mToolbar = (Toolbar)findViewById(R.id.toolbar_news);
         setSupportActionBar(mToolbar);
-        getAction().getNews(mHandler);
+
         mRecyclerView = (RecyclerView)findViewById(R.id.rv_newslist);
         mSwipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.srl_refresh);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeColors(Color.BLUE);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new NewsAdapter();
-        handleSearchIntent(getIntent());
+        mRecyclerView.setAdapter(mAdapter);
 
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            int lastVisibleItem = 0;
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE
+                        && lastVisibleItem + 1 == mAdapter.getItemCount())
+                {
+                    if(mPage == mAllPage){
+
+                    }
+                    getAction().getNews(mHandler,mTitle,String.valueOf(mPage+1));
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                lastVisibleItem = ((LinearLayoutManager)mRecyclerView.getLayoutManager()).findLastVisibleItemPosition();
+            }
+        });
+
+        handleSearchIntent(getIntent());
+        getAction().getNews(mHandler);
         Log.d("NewsActivity", "NewsActivity thread id is " + Thread.currentThread().getId());
     }
 
@@ -89,7 +108,8 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         {
             String key = intent.getStringExtra(SearchManager.QUERY);
             Log.e(TAG,"title:"+key);
-            getAction().getNews(mHandler,key);
+            mTitle = key;
+            getAction().getNews(mHandler,key,null);
             mSwipeRefreshLayout.setRefreshing(true);
             mRecyclerView.scrollToPosition(0);
         }
@@ -165,6 +185,54 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     public void onRefresh()
     {
         getAction().getNews(mHandler);
+        mTitle = "";
+    }
+
+    private Handler mHandler = new Handler()
+    {
+        @Override
+        public void handleMessage(Message msg)
+        {
+            if (msg.what == 0)
+            {
+                mData = (NewsInfo) msg.obj;
+                if(mData.getPagebean().getCurrentPage() == 1){
+                    setNews(mData.getPagebean().getContentlist());
+                }else {
+                    addNews(mData.getPagebean().getContentlist());
+                }
+                mPage = mData.getPagebean().getCurrentPage();
+                mAdapter.notifyDataSetChanged();
+                mSimpleAdapter.notifyDataSetChanged();
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        }
+    };
+
+    public void setNews(List<NewsInfo.News> list)
+    {
+        mNewsList.clear();
+        mHeaderDataList.clear();
+        addNews(list);
+        int i = 0;
+        int num  = 0;
+        while (num<5 && i <mNewsList.size() )
+        {
+            if(mNewsList.get(i).getImageurls().size()>0)
+            {
+                mHeaderDataList.add(mNewsList.get(i));
+                num++;
+            }
+            i++;
+        }
+    }
+    public void addNews(List<NewsInfo.News> list)
+    {
+        int num = list.size();
+        for(int i = 0 ; i < num ; i++)
+        {
+            mNewsList.add(list.get(i));
+        }
     }
 
     class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
@@ -172,6 +240,12 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
 
         private final int  HEADER = 0;
         private final int  NEWS = 1;
+        private final int  FOOTER = 2;
+
+        public NewsAdapter()
+        {
+            mSimpleAdapter = new SimpleAdapter();
+        }
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
         {
@@ -186,6 +260,10 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
             {
                 View view = LayoutInflater.from(NekoApplication.getInstance()).inflate(R.layout.view_news_header, parent, false);
                 return new NewsHeaderHolder(view);
+            }else if(viewType == FOOTER)
+            {
+                View view = LayoutInflater.from(NekoApplication.getInstance()).inflate(R.layout.listview_footer,parent,false);
+                return new NewsFooterHolder(view);
             }
             return null;
         }
@@ -197,17 +275,19 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
             if(holder instanceof NewsHolder)
             {
                 holder.itemView.setTag(holder);
-                ((NewsHolder) holder).mDate.setText(mData.getPagebean().getContentlist().get(index).getPubDate());
-                ((NewsHolder) holder).mSource.setText(mData.getPagebean().getContentlist().get(index).getSource());
-                ((NewsHolder) holder).mBody.setText(mData.getPagebean().getContentlist().get(index).getLong_abs()==null?
-                        mData.getPagebean().getContentlist().get(index).getDesc():mData.getPagebean().getContentlist().get(index).getLong_abs());
-                ((NewsHolder) holder).mTitle.setText(mData.getPagebean().getContentlist().get(index).getTitle());
+                ((NewsHolder) holder).mDate.setText(mNewsList.get(index).getPubDate());
+                ((NewsHolder) holder).mSource.setText(mNewsList.get(index).getSource());
+                ((NewsHolder) holder).mBody.setText(mNewsList.get(index).getLong_abs()==null?
+                        mNewsList.get(index).getDesc():mNewsList.get(index).getLong_abs());
+                ((NewsHolder) holder).mTitle.setText(mNewsList.get(index).getTitle());
             }
             else if (holder instanceof NewsHeaderHolder)
             {
                 holder.itemView.setTag(holder);
                 ViewPager vp = ((NewsHeaderHolder) holder).mViewPager;
-                vp.setAdapter(new SimpleAdapter());
+
+                vp.setAdapter(mSimpleAdapter);
+//
                 vp.setOnTouchListener(new View.OnTouchListener() {
 
                     @Override
@@ -217,36 +297,53 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                     }
                 });
 
-//                vp.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//
-//                    @Override
-//                    public void onPageSelected(int arg0) {
-//                    }
-//
-//                    @Override
-//                    public void onPageScrolled(int arg0, float arg1, int arg2) {
-//                        vp.getParent().requestDisallowInterceptTouchEvent(true);
-//                    }
-//
-//                    @Override
-//                    public void onPageScrollStateChanged(int arg0) {
-//                    }
-//                });
+                vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
+                    @Override
+                    public void onPageSelected(int arg0) {
+                    }
+
+                    @Override
+                    public void onPageScrolled(int arg0, float arg1, int arg2) {
+                        if(arg2 != 0)
+                        {
+                            mSwipeRefreshLayout.setEnabled(false);
+                        }else
+                        {
+                            mSwipeRefreshLayout.setEnabled(true);
+                        }
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int arg0) {
+                    }
+                });
+
+            }else if (holder instanceof NewsFooterHolder)
+            {
+                holder.itemView.setTag(holder);
             }
 
         }
 
+
         @Override
         public int getItemViewType(int position)
         {
-            if(position == 0) return HEADER;
+            if(position == 0) {
+                return HEADER;
+            }else if(position == getItemCount() - 1){
+                return FOOTER;
+            }
             return NEWS;
         }
 
         @Override
         public int getItemCount() {
-            return mData.getPagebean().getContentlist().size()+1;
+            if(mNewsList.size()==0){
+                return 0;
+            }
+            return mNewsList.size()+2;
         }
 
         class NewsHolder extends RecyclerView.ViewHolder
@@ -276,30 +373,27 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
             }
         }
 
-        class SimpleAdapter extends PagerAdapter
+        class NewsFooterHolder extends RecyclerView.ViewHolder
         {
-            private List<NewsInfo.News> mHeaderData;
+            private TextView mLoadMessageTv;
+            private ProgressBar mLoadingBar;
+            public NewsFooterHolder(View itemView) {
+                super(itemView);
+                mLoadMessageTv = (TextView)itemView.findViewById(R.id.pull_to_refresh_loadmore_text);
+                mLoadingBar = (ProgressBar)itemView.findViewById(R.id.pull_to_refresh_load_progress);
+            }
+        }
+        public class SimpleAdapter extends PagerAdapter
+        {
             private List<View> mViews;
             public SimpleAdapter()
             {
                 Log.e("TAG","PagerAdapter");
-                mHeaderData = new ArrayList<>();
                 mViews = new ArrayList<>();
-                int i = 0;
-                int num  = 0;
-                while (num<5 && i <mData.getPagebean().getContentlist().size() )
-                {
-                    if(mData.getPagebean().getContentlist().get(i).getImageurls().size()>0)
-                    {
-                        mHeaderData.add(mData.getPagebean().getContentlist().get(i));
-                        num++;
-                    }
-                    i++;
-                }
             }
             @Override
             public int getCount() {
-                return mHeaderData.size();
+                return mHeaderDataList.size();
             }
 
             @Override
@@ -313,14 +407,13 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
             }
             @Override
             public Object instantiateItem(ViewGroup view, int position) {
-                View root = LayoutInflater.from(getApplication()).inflate(R.layout.view_newsheader_item,view,false);
+                View root = LayoutInflater.from(getApplication()).inflate(R.layout.view_newsheader,view,false);
                 ImageView iv = (ImageView)root.findViewById(R.id.news_img);
                 TextView tv = (TextView)root.findViewById(R.id.news_title);
-                getAction().getImg(mHeaderData.get(position).getImageurls().get(0).getUrl(),iv,null,iv.getMaxHeight(),iv.getMaxWidth());
-                tv.setText(mHeaderData.get(position).getTitle());
+                getAction().getImg(mHeaderDataList.get(position).getImageurls().get(0).getUrl(), iv, null, iv.getMaxHeight(), iv.getMaxWidth());
+                tv.setText(mHeaderDataList.get(position).getTitle());
                 mViews.add(position, root);
                 view.addView(root);
-                Log.e("TAG","on!!!!!!!!!!!!!!!!!!!!!!!");
                 return root;
             }
         }

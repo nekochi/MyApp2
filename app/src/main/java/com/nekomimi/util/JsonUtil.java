@@ -100,15 +100,16 @@ public class JsonUtil {
             event = object.getString("showapi_res_code");
             msg = object.getString("showapi_res_error");
             obj = object.getJSONObject("showapi_res_body").toString();
+            Gson gson = new Gson();
+            ApiResponse response = new ApiResponse();
+            response.setEvent(event);
+            response.setMsg(msg);
+            response.setObj(gson.fromJson(obj,type));
+            return response;
         }catch (JSONException e)
         {
             e.printStackTrace();
         }
-        Gson gson = new Gson();
-        ApiResponse response = new ApiResponse();
-        response.setEvent(event);
-        response.setMsg(msg);
-        response.setObj(gson.fromJson(obj,type));
-        return response;
+        return null;
     }
 }

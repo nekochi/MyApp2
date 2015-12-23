@@ -8,27 +8,10 @@ import java.util.List;
  */
 public class NewsInfo
 {
-    private int currentPage;
-    private int maxResult;
+
     private PageBean pagebean;
 
-    public int getCurrentPage()
-    {
-        return currentPage;
-    }
-    public void setCurrentPage(int currentPage)
-    {
-        this.currentPage = currentPage;
-    }
 
-    public int getMaxResult()
-    {
-        return this.maxResult;
-    }
-    public void setMaxResult(int maxResult)
-    {
-        this.maxResult = maxResult;
-    }
 
     public PageBean getPagebean()
     {
@@ -38,11 +21,11 @@ public class NewsInfo
     {
         this.pagebean = pagebean;
     }
-    @Override
-    public String toString()
-    {
-        return new StringBuilder("{ currentPage:").append(currentPage).append(",maxResult:").append(maxResult).append(pagebean.toString()).append("}").toString();
-    }
+//    @Override
+//    public String toString()
+//    {
+//        return new StringBuilder("{ currentPage:").append(currentPage).append(",maxResult:").append(maxResult).append(pagebean.toString()).append("}").toString();
+//    }
 
 
 
@@ -50,6 +33,8 @@ public class NewsInfo
     {
         private int allNum;
         private int allPages;
+        private int currentPage;
+        private int maxResult;
         private List<News> contentlist;
 
         public int getAllNum()
@@ -59,6 +44,23 @@ public class NewsInfo
         public void setAllNum(int allNum)
         {
             this.allNum = allNum;
+        }
+        public int getCurrentPage()
+        {
+            return currentPage;
+        }
+        public void setCurrentPage(int currentPage)
+        {
+            this.currentPage = currentPage;
+        }
+
+        public int getMaxResult()
+        {
+            return this.maxResult;
+        }
+        public void setMaxResult(int maxResult)
+        {
+            this.maxResult = maxResult;
         }
 
         public int getAllPages()

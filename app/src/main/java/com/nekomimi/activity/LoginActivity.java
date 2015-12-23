@@ -12,20 +12,16 @@ import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nekomimi.R;
-import com.nekomimi.base.AppActionImpl;
 import com.nekomimi.base.AppConfig;
 import com.nekomimi.util.Util;
 
@@ -42,9 +38,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
      */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -63,6 +57,12 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         setContentView(R.layout.activity_login);
 
         // Set up the login form.
+        initView();
+
+    }
+
+    private void initView()
+    {
         mAccountView = (AutoCompleteTextView) findViewById(R.id.account);
         mAccountView.setThreshold(1);
         populateAutoComplete();
@@ -80,7 +80,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         });
 
         mSignInButton = (Button) findViewById(R.id.sign_in_button);
-        mSignInButton.setOnClickListener(new OnClickListener() {
+        mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
@@ -89,7 +89,6 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-
     }
 
     private void populateAutoComplete() {
@@ -111,14 +110,8 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
 
         if (mState.getCheckedRadioButtonId() == R.id.rb_ehentai)
         {
-            getAction().getImg("http://www.uml.org.cn/mobiledev/images/2013102116.png", (ImageView)findViewById(R.id.test_iv), new AppActionImpl.Callback<Void>() {
-                @Override
-                public void onResponce(boolean event, Void arg) {
-                    if(event)
-                        Toast.makeText(getContext(),"success",Toast.LENGTH_SHORT).show();
-                }
-            }, 0, 0);
-//            login(null,null);
+
+            login(null,null);
         } else if (mState.getCheckedRadioButtonId() == R.id.rb_exhentai) {
             login(null,null);
         } else {
@@ -218,7 +211,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<String>(LoginActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, accountCollection);
+                        android.R.layout.simple_spinner_dropdown_item, accountCollection);
 
         mAccountView.setAdapter(adapter);
     }
@@ -248,13 +241,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                 return false;
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mAccount)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
+
 
             // TODO: register the new account here.
             return true;

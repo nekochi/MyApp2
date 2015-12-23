@@ -34,6 +34,7 @@ public class ApiImpl implements Api
     {
         Map<String,String> map = new HashMap<>();
         map.put("userName",userName);
+        map.put("password",password);
         mVolleyConnect.getStringRequest(map,"",listener,errorListener);
     }
 

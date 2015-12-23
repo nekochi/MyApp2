@@ -46,7 +46,7 @@ public class AppConfig {
 
     public SharedPreferences getSharedPreferences()
     {
-        if(mAppConfig == null)
+        if(mSharedPreferences == null)
         {
             getInstance();
         }
@@ -139,5 +139,16 @@ public class AppConfig {
             return;
         }
         mAppConfig.mSharedPreferences = sp;
+    }
+
+    public void cleanSharedPreferences()
+    {
+        SharedPreferences sp = getSharedPreferences();
+        if(sp == null)
+        {
+            return;
+        }
+        SharedPreferences.Editor editor = sp.edit();
+        editor.apply();
     }
 }

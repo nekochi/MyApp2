@@ -73,16 +73,16 @@ public class AppActionImpl implements AppAction {
     @Override
     public void getNews(Handler handler)
     {
-        getNews(handler,null);
+        getNews(handler,null,null);
     }
 
     @Override
-    public void getNews(Handler handler, String title)
+    public void getNews(Handler handler, String title , String page)
     {
         this.mHandler = handler;
         this.onSuccessListener = new RespJsonListener(NEWSLIST);
         this.onErrorListener = new ErrorListener(NEWSLIST);
-        this.mApi.getNews(null,"",title,null,onSuccessListener,onErrorListener);
+        this.mApi.getNews(null,"",title,page,onSuccessListener,onErrorListener);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class AppActionImpl implements AppAction {
                 NewsInfo info = response.getObj();
                 Message message = new Message();
                 message.what = Integer.valueOf(response.getEvent());
-
+                message.arg1 = info.getPagebean().getCurrentPage();
                 message.obj = info;
                 mHandler.sendMessage(message);
                 break;
