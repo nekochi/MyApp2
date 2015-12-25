@@ -6,8 +6,9 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -25,6 +26,7 @@ import com.nekomimi.R;
 import com.nekomimi.base.AppConfig;
 import com.nekomimi.util.Util;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,8 +44,8 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
-
+//    private UserLoginTask mAuthTask = null;
+    private final UiHandler mUiHandler = new UiHandler(this);
     // UI references.
     private AutoCompleteTextView mAccountView;
     private EditText mPasswordView;
@@ -104,16 +106,17 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
      * errors are presented and no actual login attempt is made.
      */
     public void attemptLogin() {
-        if (mAuthTask != null) {
+        if (mUiHandler == null) {
             return;
         }
 
-        if (mState.getCheckedRadioButtonId() == R.id.rb_ehentai)
+        if (mState.getCheckedRadioButtonId() == R.id.rb_common)
         {
 
             login(null,null);
         } else if (mState.getCheckedRadioButtonId() == R.id.rb_exhentai) {
-            login(null,null);
+           // login(null,null);
+            getAction().access(null);
         } else {
 
             // Reset errors.
@@ -169,8 +172,13 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mPasswordView.getWindowToken(), 0);
         Util.showProgress(true, mLoginFormView, mProgressView);
-        mAuthTask = new UserLoginTask(account, password);
-        mAuthTask.execute((Void) null);
+        if(account == null && password == null)
+        {
+            mUiHandler.sendMessageDelayed(new Message(),2000);
+        }
+        getAction().login(account,password,mUiHandler);
+//        mAuthTask = new UserLoginTask(account, password);
+//        mAuthTask.execute((Void) null);
     }
 
     @Override
@@ -216,61 +224,90 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         mAccountView.setAdapter(adapter);
     }
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    private static class UiHandler extends Handler
+    {
+        private final WeakReference<BaseActivity> mActivity;
 
-        private final String mAccount;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mAccount = email;
-            mPassword = password;
+        public UiHandler(BaseActivity activity)
+        {
+            mActivity = new WeakReference<BaseActivity>(activity);
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
+        public void handleMessage(Message msg)
+        {
+            BaseActivity activity = mActivity.get();
+            if (activity != null)
+            {
+                ((LoginActivity)activity).handleLogin();
             }
-
-
-
-            // TODO: register the new account here.
-            return true;
         }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            Util.showProgress(false,null,mProgressView);
-
-            if (success) {
-                AppConfig appConfig = AppConfig.getInstance();
+    }
+    private void handleLogin()
+    {
+        Util.showProgress(false,null,mProgressView);
+        AppConfig appConfig = AppConfig.getInstance();
                 String str = appConfig.get(AppConfig.ACCOUNT);
-                appConfig.set(AppConfig.ACCOUNT, Util.addAccount(str, mAccount));
+                appConfig.set(AppConfig.ACCOUNT, Util.addAccount(str, mAccountView.getText().toString()));
                 Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
                 startActivity(intent);
                 finish();
-
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            Util.showProgress(false,mLoginFormView,mProgressView);
-        }
     }
+//    /**
+//     * Represents an asynchronous login/registration task used to authenticate
+//     * the user.
+//     */
+//    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+//
+//        private final String mAccount;
+//        private final String mPassword;
+//
+//        UserLoginTask(String account, String password) {
+//            mAccount = account;
+//            mPassword = password;
+//        }
+//
+//        @Override
+//        protected Boolean doInBackground(Void... params) {
+//            // TODO: attempt authentication against a network service.
+//
+//            try {
+//                // Simulate network access.
+//                Thread.sleep(2000);
+//            } catch (InterruptedException e) {
+//                return false;
+//            }
+//
+//
+//
+//            // TODO: register the new account here.
+//            return true;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(final Boolean success) {
+//            mAuthTask = null;
+//            Util.showProgress(false,null,mProgressView);
+//
+//            if (success) {
+//                AppConfig appConfig = AppConfig.getInstance();
+//                String str = appConfig.get(AppConfig.ACCOUNT);
+//                appConfig.set(AppConfig.ACCOUNT, Util.addAccount(str, mAccount));
+//                Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+//                startActivity(intent);
+//                finish();
+//
+//            } else {
+//                mPasswordView.setError(getString(R.string.error_incorrect_password));
+//                mPasswordView.requestFocus();
+//            }
+//        }
+//
+//        @Override
+//        protected void onCancelled() {
+//            mAuthTask = null;
+//            Util.showProgress(false,mLoginFormView,mProgressView);
+//        }
+//    }
 }
 

@@ -46,6 +46,9 @@ public class NekoStringRequest extends StringRequest
         mHeader.put(AppConfig.USERAGENT,AppConfig.getInstance().getUserAgent());
         mHeader.put(AppConfig.COOKIE,AppConfig.getInstance().getCookie());
         mHeader.put("Connection","keep-alive");
+        mHeader.put("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+        mHeader.put("Accept-Encoding","gzip, deflate");
+        mHeader.put("Accept-Language","zh-CN,zh;q=0.8,en;q=0.6");
         return mHeader;
     }
    @Override
@@ -66,8 +69,9 @@ public class NekoStringRequest extends StringRequest
             if(!TextUtils.isEmpty(m))
             {
                 AppConfig.getInstance().setCookie(m);
-                Log.d("COOKIE",m);
-                Log.d("Header", responseHeader.toString());
+                Log.e("request-cookie",mHeader.get(AppConfig.COOKIE));
+                Log.e("COOKIE",m);
+                Log.e("Header", responseHeader.toString());
             }
         } catch (UnsupportedEncodingException var4) {
             parsed = new String(response.data);

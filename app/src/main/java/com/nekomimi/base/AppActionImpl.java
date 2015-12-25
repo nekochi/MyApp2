@@ -108,7 +108,7 @@ public class AppActionImpl implements AppAction {
                 mHandler.sendMessage(message);
                 break;
             case LOGIN:
-
+                mHandler.sendMessageDelayed(new Message(),2000);
                 break;
             case ACCESS:
 
@@ -143,6 +143,7 @@ public class AppActionImpl implements AppAction {
         @Override
         public void onResponse(String  t)
         {
+            Log.e(mTag,t);
             handlerMessage(t, mTag);
         }
     }

@@ -20,7 +20,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             style="@style/Text_Black"
             android:id="@+id/tv_newstitle"
-            android:singleLine="true"
+            android:maxLines="2"
             android:ellipsize="end"/>
         <TextView
             android:layout_width="match_parent"
@@ -29,7 +29,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             style="@style/Text_Black"
             android:id="@+id/tv_newsbody"
-            android:maxLines="2"
+            android:maxLines="3"
             android:ellipsize="end"/>
         <View
             android:layout_width="match_parent"

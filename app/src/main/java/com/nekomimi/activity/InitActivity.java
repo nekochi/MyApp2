@@ -19,6 +19,7 @@ import com.nekomimi.util.Util;
 public class InitActivity extends Activity {
 
     private AppConfig mAppConfig;
+    private final static String TAG = "InitActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,7 @@ public class InitActivity extends Activity {
 
     private void Resolution()
     {
-        if(!mAppConfig.get(mAppConfig.RESOLUTION).equals(mAppConfig.NOT_EXIST))
+        if(!mAppConfig.get(AppConfig.RESOLUTION).equals(AppConfig.NOT_EXIST))
         {
             return;
         }
@@ -44,7 +45,8 @@ public class InitActivity extends Activity {
         float width = displayMetrics.widthPixels;
         float height = displayMetrics.heightPixels;
         String str = Util.toResolution(width,height,density);
-        mAppConfig.set(mAppConfig.RESOLUTION,str);
+        mAppConfig.set(AppConfig.RESOLUTION, str);
+
     }
 
     public class InitTask extends AsyncTask<Void, Void, Boolean>
@@ -60,6 +62,8 @@ public class InitActivity extends Activity {
                 return false;
             }
             //在这里做初始化工作
+            Log.e(TAG,"Cookies:"+mAppConfig.getCookie());
+            Log.e(TAG,"sharedP:"+mAppConfig.getSharedPreferences().toString());
             Resolution();
             NImageCache.getInstance();
             return true;
@@ -68,7 +72,7 @@ public class InitActivity extends Activity {
         @Override
         protected void onPostExecute(Boolean success )
         {
-            String str = mAppConfig.get(mAppConfig.RESOLUTION);
+            String str = mAppConfig.get(AppConfig.RESOLUTION);
             float width = Util.getResolutionFromStr(str, "width");
             float height = Util.getResolutionFromStr(str , "height");
             float density = Util.getResolutionFromStr(str , "density");

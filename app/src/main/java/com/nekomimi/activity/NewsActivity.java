@@ -53,7 +53,6 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     private NewsAdapter.SimpleAdapter mSimpleAdapter;
 
 
-
     private String mTitle;
     private int mPage;
     private int mAllPage;
@@ -83,10 +82,10 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
                         && lastVisibleItem + 1 == mAdapter.getItemCount())
                 {
-                    if(mPage == mAllPage){
-
+                    mAdapter.islastPage(mPage == mAllPage);
+                    if(mPage != mAllPage) {
+                        getAction().getNews(mHandler, mTitle, String.valueOf(mPage + 1));
                     }
-                    getAction().getNews(mHandler,mTitle,String.valueOf(mPage+1));
                 }
             }
 
@@ -153,7 +152,16 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         final MenuItem menuItem = menu.findItem(R.id.action_search);
 
         final SearchView searchView =  (SearchView) menuItem.getActionView();
-
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus)
+                {
+                    menuItem.collapseActionView();
+                    searchView.setQuery("",false);
+                }
+            }
+        });
         SearchManager searchManager= (SearchManager)getSystemService(Context.SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
@@ -202,6 +210,7 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                     addNews(mData.getPagebean().getContentlist());
                 }
                 mPage = mData.getPagebean().getCurrentPage();
+                mAllPage = mData.getPagebean().getAllPages();
                 mAdapter.notifyDataSetChanged();
                 mSimpleAdapter.notifyDataSetChanged();
                 mSwipeRefreshLayout.setRefreshing(false);
@@ -235,7 +244,14 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         }
     }
 
-    class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+    public void checkNewsInfo(String url)
+    {
+        Intent intent = new Intent(NewsActivity.this,NewsInfoWebActivity.class);
+        intent.putExtra("URL",url);
+        startActivity(intent);
+    }
+
+    class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener
     {
 
         private final int  HEADER = 0;
@@ -253,8 +269,8 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
             if(viewType == NEWS)
             {
                 View view = LayoutInflater.from(NekoApplication.getInstance()).inflate(R.layout.view_newscard,parent,false);
+                view.setOnClickListener(this);
                 return  new NewsHolder(view);
-
             }
             else if(viewType == HEADER)
             {
@@ -280,6 +296,7 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                 ((NewsHolder) holder).mBody.setText(mNewsList.get(index).getLong_abs()==null?
                         mNewsList.get(index).getDesc():mNewsList.get(index).getLong_abs());
                 ((NewsHolder) holder).mTitle.setText(mNewsList.get(index).getTitle());
+                ((NewsHolder) holder).setNewsDate(mNewsList.get(index));
             }
             else if (holder instanceof NewsHeaderHolder)
             {
@@ -327,6 +344,7 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         }
 
 
+
         @Override
         public int getItemViewType(int position)
         {
@@ -346,12 +364,33 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
             return mNewsList.size()+2;
         }
 
+        public void islastPage(boolean flag)
+        {
+            NewsFooterHolder holder = (NewsFooterHolder)mRecyclerView.findViewHolderForAdapterPosition(getItemCount()-1);
+            if(flag) {
+            holder.mLoadingBar.setVisibility(View.GONE);
+            holder.mLoadMessageTv.setText("再也找不到更多了哦_(:з」∠)_");
+            }else
+            {
+                holder.mLoadingBar.setVisibility(View.VISIBLE);
+                holder.mLoadMessageTv.setText("");
+            }
+        }
+
+        @Override
+        public void onClick(View v)
+        {
+            NewsHolder holder = (NewsHolder) v.getTag();
+            checkNewsInfo(holder.getNewsDate().getLink());
+        }
+
         class NewsHolder extends RecyclerView.ViewHolder
         {
             private TextView mTitle;
             private TextView mBody;
             private TextView mSource;
             private TextView mDate;
+            private NewsInfo.News mNewsDate;
 
             public NewsHolder(View itemView) {
                 super(itemView);
@@ -359,6 +398,16 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                 mBody = (TextView) itemView.findViewById(R.id.tv_newsbody);
                 mSource = (TextView) itemView.findViewById(R.id.tv_newssource);
                 mDate = (TextView) itemView.findViewById(R.id.tv_newspubdate);
+            }
+
+            public void setNewsDate(NewsInfo.News news)
+            {
+                this.mNewsDate = news;
+            }
+
+            public NewsInfo.News getNewsDate()
+            {
+                return mNewsDate;
             }
         }
 
@@ -406,16 +455,24 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                 view.removeView(mViews.get(position));
             }
             @Override
-            public Object instantiateItem(ViewGroup view, int position) {
+            public Object instantiateItem(ViewGroup view, final int position) {
                 View root = LayoutInflater.from(getApplication()).inflate(R.layout.view_newsheader,view,false);
                 ImageView iv = (ImageView)root.findViewById(R.id.news_img);
                 TextView tv = (TextView)root.findViewById(R.id.news_title);
                 getAction().getImg(mHeaderDataList.get(position).getImageurls().get(0).getUrl(), iv, null, iv.getMaxHeight(), iv.getMaxWidth());
                 tv.setText(mHeaderDataList.get(position).getTitle());
                 mViews.add(position, root);
+                root.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        checkNewsInfo(mHeaderDataList.get(position).getLink());
+                    }
+                });
                 view.addView(root);
                 return root;
             }
         }
     }
+
+
 }

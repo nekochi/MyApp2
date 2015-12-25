@@ -102,7 +102,6 @@ public class HomeActivity extends AppCompatActivity {
 			}
 		};
 		mActionBarDrawerToggle.syncState();
-		mActionBarDrawerToggle.syncState();
 		mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
 		NavigationView mNavTab = (NavigationView)findViewById(R.id.nav_view);

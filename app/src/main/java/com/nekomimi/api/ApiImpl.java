@@ -1,5 +1,6 @@
 package com.nekomimi.api;
 
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.android.volley.Response;
@@ -21,7 +22,7 @@ public class ApiImpl implements Api
 {
     private VolleyConnect mVolleyConnect;
 
-    private static final String HOST = "https://www.baidu.com/";
+    private static final String HOST = "https://github.com/ogrebgr/android_volley_examples/tree/master/src/com/github/volley_examples";
 
     public ApiImpl()
     {
@@ -33,9 +34,11 @@ public class ApiImpl implements Api
     public void login(String userName,String password,Response.Listener<String> listener,Response.ErrorListener errorListener)
     {
         Map<String,String> map = new HashMap<>();
-        map.put("userName",userName);
-        map.put("password",password);
-        mVolleyConnect.getStringRequest(map,"",listener,errorListener);
+        map.put("UserName",userName);
+        map.put("PassWord",password);
+        map.put("CookieDate","1");
+        mVolleyConnect.postStringRequest(null,"https://forums.e-hentai.org/index.php?act=Login&CODE=01",listener,errorListener,map);
+//        mVolleyConnect.getStringRequest(map,"https://forums.e-hentai.org/index.php?act=Login&CODE=01",listener,errorListener);
     }
 
     @Override
@@ -51,6 +54,7 @@ public class ApiImpl implements Api
         {
             e.printStackTrace();
         }
+        Log.e("access",sb.toString());
          mVolleyConnect.getStringRequest(null,sb.toString(),listener,errorListener);
     }
 

@@ -47,4 +47,7 @@
     <string name="search_toolbar_view">Search</string>
     <string name="refresh_toolbar_view">Refresh</string>
     <string name="searchview_hint">search news title</string>
+
+    <!-- Strings related to NewsInfoWebActivity -->
+    <string name="title_activity_newinfoweb">NewsInfo</string>
 </resources>
