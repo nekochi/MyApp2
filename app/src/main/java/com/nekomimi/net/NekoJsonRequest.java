@@ -1,8 +1,5 @@
 package com.nekomimi.net;
 
-import android.text.TextUtils;
-import android.util.Log;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -62,15 +59,15 @@ public class NekoJsonRequest extends JsonObjectRequest
     {
         try {
             String je = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-            Map<String,String> responseHeader = response.headers;
-            String m = responseHeader.get("Set-Cookie");
-
-            if(!TextUtils.isEmpty(m))
-            {
-                AppConfig.getInstance().setCookie(m);
-                Log.d("COOKIE",m);
-                Log.d("Header", responseHeader.toString());
-            }
+//            Map<String,String> responseHeader = response.headers;
+//            String m = responseHeader.get("Set-Cookie");
+//
+//            if(!TextUtils.isEmpty(m))
+//            {
+//                AppConfig.getInstance().setCookie(m);
+//                Log.d("COOKIE",m);
+//                Log.d("Header", responseHeader.toString());
+//            }
             return Response.success(new JSONObject(je), HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException var3) {
             return Response.error(new ParseError(var3));

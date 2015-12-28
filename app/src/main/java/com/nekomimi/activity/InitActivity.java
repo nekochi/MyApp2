@@ -62,8 +62,10 @@ public class InitActivity extends Activity {
                 return false;
             }
             //在这里做初始化工作
-            Log.e(TAG,"Cookies:"+mAppConfig.getCookie());
-            Log.e(TAG,"sharedP:"+mAppConfig.getSharedPreferences().toString());
+            Log.e(TAG,"Cookies:"+mAppConfig.getCookiesSp().getAll().toString());
+            Log.e(TAG,"sharedP:"+mAppConfig.getSharedPreferences().getAll().toString());
+            AppConfig.getInstance().cleanCookiesSp();
+            Log.e(TAG, "Clean Cookies:" + mAppConfig.getCookiesSp().getAll().toString());
             Resolution();
             NImageCache.getInstance();
             return true;

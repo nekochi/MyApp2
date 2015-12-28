@@ -43,12 +43,12 @@ public class NekoStringRequest extends StringRequest
     @Override
     public Map<String,String> getHeaders() throws AuthFailureError
     {
-        mHeader.put(AppConfig.USERAGENT,AppConfig.getInstance().getUserAgent());
+//        mHeader.put(AppConfig.USERAGENT,AppConfig.getInstance().getUserAgent());
         mHeader.put(AppConfig.COOKIE,AppConfig.getInstance().getCookie());
-        mHeader.put("Connection","keep-alive");
-        mHeader.put("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
-        mHeader.put("Accept-Encoding","gzip, deflate");
-        mHeader.put("Accept-Language","zh-CN,zh;q=0.8,en;q=0.6");
+//        mHeader.put("Connection","keep-alive");
+//        mHeader.put("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+//        mHeader.put("Accept-Encoding","gzip, deflate");
+//        mHeader.put("Accept-Language","zh-CN,zh;q=0.8,en;q=0.6");
         return mHeader;
     }
    @Override
@@ -65,11 +65,11 @@ public class NekoStringRequest extends StringRequest
             parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
             Map<String,String> responseHeader = response.headers;
             String m = responseHeader.get("Set-Cookie");
-
+//
             if(!TextUtils.isEmpty(m))
             {
-                AppConfig.getInstance().setCookie(m);
-                Log.e("request-cookie",mHeader.get(AppConfig.COOKIE));
+                AppConfig.getInstance().setCookie(m.split(";"));
+                Log.e("request-cookie", mHeader.get(AppConfig.COOKIE));
                 Log.e("COOKIE",m);
                 Log.e("Header", responseHeader.toString());
             }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.nekomimi.util;
+package com.nekomimi.net;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;

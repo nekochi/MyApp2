@@ -22,7 +22,7 @@ public class ApiImpl implements Api
 {
     private VolleyConnect mVolleyConnect;
 
-    private static final String HOST = "https://github.com/ogrebgr/android_volley_examples/tree/master/src/com/github/volley_examples";
+    private static final String HOST = "http://exhentai.org/";
 
     public ApiImpl()
     {
@@ -36,7 +36,7 @@ public class ApiImpl implements Api
         Map<String,String> map = new HashMap<>();
         map.put("UserName",userName);
         map.put("PassWord",password);
-        map.put("CookieDate","1");
+        map.put("CookieDate", "1");
         mVolleyConnect.postStringRequest(null,"https://forums.e-hentai.org/index.php?act=Login&CODE=01",listener,errorListener,map);
 //        mVolleyConnect.getStringRequest(map,"https://forums.e-hentai.org/index.php?act=Login&CODE=01",listener,errorListener);
     }

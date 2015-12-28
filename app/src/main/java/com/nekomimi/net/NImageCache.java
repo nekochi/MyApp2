@@ -6,7 +6,6 @@ import android.util.LruCache;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.nekomimi.base.NekoApplication;
-import com.nekomimi.util.DiskLruCache;
 import com.nekomimi.util.Util;
 
 import java.io.IOException;

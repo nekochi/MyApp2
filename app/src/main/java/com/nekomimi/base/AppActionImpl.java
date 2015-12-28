@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -99,7 +100,8 @@ public class AppActionImpl implements AppAction {
         switch (tag)
         {
             case NEWSLIST:
-                ApiResponse<NewsInfo> response = JsonUtil.toApiRes((JSONObject)msg,new TypeToken<NewsInfo>(){}.getType());
+            {
+                ApiResponse<NewsInfo> response = JsonUtil.toApiRes((JSONObject) msg, new TypeToken<NewsInfo>() {}.getType());
                 NewsInfo info = response.getObj();
                 Message message = new Message();
                 message.what = Integer.valueOf(response.getEvent());
@@ -107,9 +109,23 @@ public class AppActionImpl implements AppAction {
                 message.obj = info;
                 mHandler.sendMessage(message);
                 break;
+            }
             case LOGIN:
-                mHandler.sendMessageDelayed(new Message(),2000);
+            {
+                Message message = new Message();
+                if (AppConfig.getInstance().getCookie(AppConfig.IPB_MEMBER_ID).equals(AppConfig.NOT_EXIST) ||
+                        AppConfig.getInstance().getCookie(AppConfig.IPB_PASS_HASH).equals(AppConfig.NOT_EXIST) ||
+                        AppConfig.getInstance().getCookie(AppConfig.IPB_SESSION_ID).equals(AppConfig.NOT_EXIST)) {
+                    Toast.makeText(mContext, "Login Failed! Please check your password or account", Toast.LENGTH_LONG).show();
+                    AppConfig.getInstance().set(AppConfig.ISLOGINED, "false");
+                    message.what = 1;
+                } else {
+                    AppConfig.getInstance().set(AppConfig.ISLOGINED, "true");
+                    message.what = 0;
+                }
+                mHandler.sendMessage(message);
                 break;
+            }
             case ACCESS:
 
                 break;
@@ -143,7 +159,7 @@ public class AppActionImpl implements AppAction {
         @Override
         public void onResponse(String  t)
         {
-            Log.e(mTag,t);
+            System.out.println(t);
             handlerMessage(t, mTag);
         }
     }

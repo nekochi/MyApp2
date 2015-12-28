@@ -239,19 +239,24 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             BaseActivity activity = mActivity.get();
             if (activity != null)
             {
-                ((LoginActivity)activity).handleLogin();
+                ((LoginActivity)activity).handleLogin(msg);
             }
         }
     }
-    private void handleLogin()
+    private void handleLogin(Message msg)
     {
-        Util.showProgress(false,null,mProgressView);
-        AppConfig appConfig = AppConfig.getInstance();
-                String str = appConfig.get(AppConfig.ACCOUNT);
-                appConfig.set(AppConfig.ACCOUNT, Util.addAccount(str, mAccountView.getText().toString()));
-                Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
-                startActivity(intent);
-                finish();
+        if(msg.what == 0)
+        {
+            Util.showProgress(false, null, mProgressView);
+            AppConfig appConfig = AppConfig.getInstance();
+            String str = appConfig.get(AppConfig.ACCOUNT);
+            appConfig.set(AppConfig.ACCOUNT, Util.addAccount(str, mAccountView.getText().toString()));
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        }else {
+            Util.showProgress(false, mLoginFormView, mProgressView);
+        }
     }
 //    /**
 //     * Represents an asynchronous login/registration task used to authenticate

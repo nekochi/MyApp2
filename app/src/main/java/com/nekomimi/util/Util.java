@@ -10,9 +10,7 @@ import android.view.View;
 import com.nekomimi.base.AppConfig;
 import com.nekomimi.base.NekoApplication;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
-import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -113,28 +111,11 @@ public class Util {
             StringBuffer sb = new StringBuffer().append(entry.getKey()).append("=").append(entry.getValue()).append(";");
             str += sb.toString();
         }
+        if(map.size()>0)
+            str = str.substring(0,str.length()-1);
         return str;
     }
 
-    public static String makeHtml(String url,Map<String,String> map,String encode) {
-        if (map.isEmpty())
-        {
-            return url;
-        }
-        StringBuffer urlResult = new StringBuffer();
-        try {
-            urlResult.append(url).append("?");
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                urlResult.append(entry.getKey()).append("=").append(URLEncoder.encode(entry.getValue(), encode)).append("&");
-            }
-            urlResult.deleteCharAt(urlResult.length() - 1);
-        }
-        catch (UnsupportedEncodingException e)
-        {
-            e.printStackTrace();
-        }
-        return urlResult.toString();
-    }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public static void showProgress(final boolean show ,final View originView ,final View progressView) {

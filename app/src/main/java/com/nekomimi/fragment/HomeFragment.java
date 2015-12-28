@@ -73,7 +73,7 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
       
         Bundle args = getArguments();
       //  hello = args != null ? args.getString("hello") : defaultHello;
-
+        getAction().access(null);
     }
 
     public void getMangaInfo()
