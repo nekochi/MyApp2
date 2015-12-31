@@ -1,9 +1,9 @@
 package com.nekomimi.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -16,7 +16,7 @@ import com.nekomimi.util.Util;
 /**
  * Created by hongchi on 2015-8-26.
  */
-public class InitActivity extends Activity {
+public class InitActivity extends AppCompatActivity {
 
     private AppConfig mAppConfig;
     private final static String TAG = "InitActivity";
@@ -63,9 +63,6 @@ public class InitActivity extends Activity {
             }
             //在这里做初始化工作
             Log.e(TAG,"Cookies:"+mAppConfig.getCookiesSp().getAll().toString());
-            Log.e(TAG,"sharedP:"+mAppConfig.getSharedPreferences().getAll().toString());
-            AppConfig.getInstance().cleanCookiesSp();
-            Log.e(TAG, "Clean Cookies:" + mAppConfig.getCookiesSp().getAll().toString());
             Resolution();
             NImageCache.getInstance();
             return true;

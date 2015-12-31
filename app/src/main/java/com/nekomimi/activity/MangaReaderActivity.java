@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -29,7 +28,7 @@ import java.util.Map;
 /**
  * Created by hongchi on 2015-9-18.
  */
-public class MangaReaderActivity extends AppCompatActivity implements MangaReaderFragment.OnFragmentInteractionListener{
+public class MangaReaderActivity extends BaseActivity implements MangaReaderFragment.OnFragmentInteractionListener{
 
    // private GestureImageView mGImageView
     private String mMangaName;
@@ -78,6 +77,11 @@ public class MangaReaderActivity extends AppCompatActivity implements MangaReade
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.hide();
         }
+    }
+
+    @Override
+    public void handleMessage(Message msg) {
+
     }
 
     @Override

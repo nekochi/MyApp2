@@ -21,10 +21,10 @@ import android.widget.LinearLayout;
 import com.nekomimi.R;
 import com.nekomimi.adapter_listener.MyFragmentPagerAdapter;
 import com.nekomimi.base.AppConfig;
-import com.nekomimi.fragment.TestFragment;
 import com.nekomimi.bean.MangaChapterInfo;
 import com.nekomimi.bean.MangaInfo;
 import com.nekomimi.fragment.MangaInfoFragment;
+import com.nekomimi.fragment.TestFragment;
 import com.nekomimi.util.JsonUtil;
 import com.nekomimi.util.Util;
 import com.squareup.picasso.Picasso;
@@ -38,7 +38,7 @@ import java.util.Map;
 /**
  * Created by hongchi on 2015-9-10.
  */
-public class MangaInfoActivity extends AppCompatActivity {
+public class MangaInfoActivity extends BaseActivity {
 
     public static final String TAG = "MangaInfoActivity";
 
@@ -50,26 +50,9 @@ public class MangaInfoActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private List<Fragment> mFragments;
     private List<MangaChapterInfo> mMangaChapterList;
-    private Handler mHandler = new Handler(){
-        public void handleMessage(Message msg) {
-            switch (msg.what)
-            {
-                case 1:
-                    mMangaChapterList = JsonUtil.praseMangaChapter((JSONObject)msg.obj);
-                    if(mMangaChapterList.isEmpty())
-                        return;
-                    mFragments.add(0, MangaInfoFragment.create(mMangaChapterList,mMangaInfo.getName()));
-                    ((MyFragmentPagerAdapter)mViewPager.getAdapter()).changeFrag(mFragments.get(0), 0);
-                    mViewPager.getAdapter().notifyDataSetChanged();
-                    Util.showProgress(false,mViewPager,mProgressbar);
-                    break;
-                case 999999:
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
+    private Handler mUiHandler = new UiHandler(this);
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -111,6 +94,26 @@ public class MangaInfoActivity extends AppCompatActivity {
         mViewPager.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, AppConfig.mScanHeight - 96));
 
         connect();
+    }
+
+    @Override
+    public void handleMessage(Message msg) {
+        switch (msg.what)
+        {
+            case 1:
+                mMangaChapterList = JsonUtil.praseMangaChapter((JSONObject) msg.obj);
+                if(mMangaChapterList.isEmpty())
+                    return;
+                mFragments.add(0, MangaInfoFragment.create(mMangaChapterList, mMangaInfo.getName()));
+                ((MyFragmentPagerAdapter)mViewPager.getAdapter()).changeFrag(mFragments.get(0), 0);
+                mViewPager.getAdapter().notifyDataSetChanged();
+                Util.showProgress(false, mViewPager, mProgressbar);
+                break;
+            case 999999:
+                break;
+            default:
+                break;
+        }
     }
 
     @Override

@@ -34,7 +34,7 @@
     <!-- Strings related to MangaInfoActivity -->
     <string name="title_activity_mangaInfo">MangaInfo</string>
 
-    <!-- Strings related to SettingActivity -->
+    <!-- Strings related to SettingsActivity -->
     <string name="title_activity_setting">Setting</string>
 
     <!-- Strings related to MangaReader -->
@@ -50,4 +50,8 @@
 
     <!-- Strings related to NewsInfoWebActivity -->
     <string name="title_activity_newinfoweb">NewsInfo</string>
+
+    <!-- Strings related to Settings -->
+    <string name="setting_category_default">Default</string>
+    <string name="setting_preference_cleanCache">Clean Cache</string>
 </resources>

@@ -15,6 +15,7 @@ import com.nekomimi.api.ApiImpl;
 import com.nekomimi.api.ApiResponse;
 import com.nekomimi.bean.NewsInfo;
 import com.nekomimi.net.VolleyConnect;
+import com.nekomimi.util.HtmlUtil;
 import com.nekomimi.util.JsonUtil;
 
 import org.json.JSONObject;
@@ -127,7 +128,7 @@ public class AppActionImpl implements AppAction {
                 break;
             }
             case ACCESS:
-
+                HtmlUtil.parseElement((String)msg);
                 break;
             default:
                 break;

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
@@ -26,7 +25,6 @@ import com.nekomimi.R;
 import com.nekomimi.base.AppConfig;
 import com.nekomimi.util.Util;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,13 +52,19 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
     private Button mSignInButton;
     private RadioGroup mState;
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         // Set up the login form.
         initView();
 
+    }
+
+    @Override
+    public void handleMessage(Message msg)
+    {
+        handleLogin(msg);
     }
 
     private void initView()
@@ -116,7 +120,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             login(null,null);
         } else if (mState.getCheckedRadioButtonId() == R.id.rb_exhentai) {
            // login(null,null);
-            getAction().access(null);
+            //getAction().access(null);
         } else {
 
             // Reset errors.
@@ -174,9 +178,12 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         Util.showProgress(true, mLoginFormView, mProgressView);
         if(account == null && password == null)
         {
-            mUiHandler.sendMessageDelayed(new Message(),2000);
+            Message msg = new Message();
+            msg.what = 1;
+            mUiHandler.sendMessageDelayed(msg,2000);
+        }else {
+            getAction().login(account, password, mUiHandler);
         }
-        getAction().login(account,password,mUiHandler);
 //        mAuthTask = new UserLoginTask(account, password);
 //        mAuthTask.execute((Void) null);
     }
@@ -224,25 +231,25 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         mAccountView.setAdapter(adapter);
     }
 
-    private static class UiHandler extends Handler
-    {
-        private final WeakReference<BaseActivity> mActivity;
-
-        public UiHandler(BaseActivity activity)
-        {
-            mActivity = new WeakReference<BaseActivity>(activity);
-        }
-
-        @Override
-        public void handleMessage(Message msg)
-        {
-            BaseActivity activity = mActivity.get();
-            if (activity != null)
-            {
-                ((LoginActivity)activity).handleLogin(msg);
-            }
-        }
-    }
+//    private static class UiHandler extends Handler
+//    {
+//        private final WeakReference<BaseActivity> mActivity;
+//
+//        public UiHandler(BaseActivity activity)
+//        {
+//            mActivity = new WeakReference<BaseActivity>(activity);
+//        }
+//
+//        @Override
+//        public void handleMessage(Message msg)
+//        {
+//            BaseActivity activity = mActivity.get();
+//            if (activity != null)
+//            {
+//                ((LoginActivity)activity).handleLogin(msg);
+//            }
+//        }
+//    }
     private void handleLogin(Message msg)
     {
         if(msg.what == 0)
@@ -254,10 +261,17 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(intent);
             finish();
-        }else {
-            Util.showProgress(false, mLoginFormView, mProgressView);
+        }else if(msg.what == 1) {
+            Util.showProgress(false, null, mProgressView);
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
         }
-    }
+        else {
+                Util.showProgress(false, mLoginFormView, mProgressView);
+            }
+        }
+
 //    /**
 //     * Represents an asynchronous login/registration task used to authenticate
 //     * the user.

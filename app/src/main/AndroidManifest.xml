@@ -51,8 +51,8 @@
             android:name=".activity.MangaInfoActivity"
             android:label="@string/title_activity_mangaInfo"/>
         <activity
-            android:name=".activity.SettingActivity"
-            android:label="@string/title_activity_setting"/>
+            android:name=".activity.SettingsActivity"
+            android:label="@string/title_activity_setting" />
         <activity
             android:name=".activity.MangaReaderActivity"
             android:label="@string/title_activity_mangaReader"

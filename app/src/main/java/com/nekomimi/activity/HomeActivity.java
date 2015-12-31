@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -12,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -34,7 +32,7 @@ import com.nekomimi.service.NetService;
 import java.util.ArrayList;
 
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends BaseActivity {
 
 	private static final String TAG = "HomeActivity";
 
@@ -51,14 +49,8 @@ public class HomeActivity extends AppCompatActivity {
 	private boolean mFlag = false;
 	private boolean mIfQuit = false;
 	private int mFloatBtMargin ;
-	private Handler mHandler = new Handler()
-	{
-		public void handleMessage(Message msg)
-		{
 
-		}
-	};
-
+	private UiHandler mUiHandler = new UiHandler(this);
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -80,7 +72,12 @@ public class HomeActivity extends AppCompatActivity {
 
 //		hideFloatBt();
 	}
-	
+
+	@Override
+	public void handleMessage(Message msg) {
+
+	}
+
 	private void initView()
 	{
 		mTabLayout = (TabLayout)findViewById(R.id.toptab);
@@ -108,6 +105,7 @@ public class HomeActivity extends AppCompatActivity {
 		mNavTab.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 			@Override
 			public boolean onNavigationItemSelected(MenuItem menuItem) {
+				Toast.makeText(getContext(),menuItem.getTitle(),Toast.LENGTH_SHORT).show();
 				switch (menuItem.getItemId()) {
 
 					default:
@@ -123,11 +121,12 @@ public class HomeActivity extends AppCompatActivity {
 			public void onClick(View v) {
 				if (v.getId() == R.id.drawer_setting)
 				{
-					Intent intent = new Intent(HomeActivity.this, SettingActivity.class);
+					Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
 					startActivity(intent);
 				}
 			}
 		});
+
 		//mTopTab = (TopTabView)findViewById(R.id.toptab);
 		mViewPager = (ViewPager)findViewById(R.id.vp_pager);
 
@@ -215,7 +214,7 @@ public class HomeActivity extends AppCompatActivity {
 		{
 			Toast.makeText(this,"press back to quit",Toast.LENGTH_LONG).show();
 			mIfQuit = true;
-			mHandler.postDelayed(runnable,3000);
+			mUiHandler.postDelayed(runnable,3000);
 		}
 	}
 

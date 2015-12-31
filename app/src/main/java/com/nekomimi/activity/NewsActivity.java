@@ -101,6 +101,11 @@ public class NewsActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         Log.d("NewsActivity", "NewsActivity thread id is " + Thread.currentThread().getId());
     }
 
+    @Override
+    public void handleMessage(Message msg) {
+
+    }
+
     private void handleSearchIntent(Intent intent)
     {
         if(Intent.ACTION_SEARCH.equals(intent.getAction()))
