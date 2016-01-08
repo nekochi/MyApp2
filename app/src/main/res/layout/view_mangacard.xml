@@ -45,15 +45,15 @@
             android:layout_toRightOf="@id/tv_mangatype"
             android:layout_margin="8dp"
             android:textColor="#000000"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="test"
-            android:textColor="#000000"
-            android:textColorHighlight="@color/colorRipple"
-            android:background="@color/colorPrimary"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"/>
+        <!--<Button-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="test"-->
+            <!--android:textColor="#000000"-->
+            <!--android:textColorHighlight="@color/colorRipple"-->
+            <!--android:background="@color/colorPrimary"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_alignParentBottom="true"/>-->
     </RelativeLayout>
 
 

@@ -60,6 +60,18 @@ public class AppConfig {
         return mAppConfig.mSharedPreferences;
     }
 
+    public void setIslogined(boolean flag)
+    {
+        SharedPreferences sp = getSharedPreferences();
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean(ISLOGINED,flag);
+        editor.apply();
+    }
+    public boolean getIsLogined()
+    {
+        SharedPreferences sp = getSharedPreferences();
+        return sp.getBoolean(ISLOGINED,false);
+    }
     public SharedPreferences getCookiesSp()
     {
         if(mSharedPreferences == null)

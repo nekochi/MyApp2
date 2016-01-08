@@ -13,12 +13,16 @@ import com.google.gson.reflect.TypeToken;
 import com.nekomimi.api.Api;
 import com.nekomimi.api.ApiImpl;
 import com.nekomimi.api.ApiResponse;
+import com.nekomimi.bean.EHentaiMangaInfo;
+import com.nekomimi.bean.HtmlDataBuilder;
 import com.nekomimi.bean.NewsInfo;
 import com.nekomimi.net.VolleyConnect;
-import com.nekomimi.util.HtmlUtil;
 import com.nekomimi.util.JsonUtil;
 
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -38,6 +42,7 @@ public class AppActionImpl implements AppAction {
     private static final String ACCESS = "Access";
     private static final String GETMANGALIST = "GetMangaList";
     private static final String NEWSLIST = "NewsList";
+    private static final String GDATA = "Gdata";
 
     public AppActionImpl(Context context)
     {
@@ -62,6 +67,15 @@ public class AppActionImpl implements AppAction {
         this.onSuccessListener = new RespStrListener(ACCESS);
         this.onErrorListener = new ErrorListener(ACCESS);
         this.mApi.access(onSuccessListener,onErrorListener, s);
+    }
+
+    @Override
+    public void gdata(Handler handler, List<EHentaiMangaInfo> list)
+    {
+        this.mHandler = handler;
+        this.onSuccessListener = new RespJsonListener(GDATA);
+        this.onErrorListener = new ErrorListener(GDATA);
+        this.mApi.gdata(list,onSuccessListener,onErrorListener);
     }
 
     @Override
@@ -103,6 +117,7 @@ public class AppActionImpl implements AppAction {
             case NEWSLIST:
             {
                 ApiResponse<NewsInfo> response = JsonUtil.toApiRes((JSONObject) msg, new TypeToken<NewsInfo>() {}.getType());
+                if(response == null) return;
                 NewsInfo info = response.getObj();
                 Message message = new Message();
                 message.what = Integer.valueOf(response.getEvent());
@@ -118,18 +133,36 @@ public class AppActionImpl implements AppAction {
                         AppConfig.getInstance().getCookie(AppConfig.IPB_PASS_HASH).equals(AppConfig.NOT_EXIST) ||
                         AppConfig.getInstance().getCookie(AppConfig.IPB_SESSION_ID).equals(AppConfig.NOT_EXIST)) {
                     Toast.makeText(mContext, "Login Failed! Please check your password or account", Toast.LENGTH_LONG).show();
-                    AppConfig.getInstance().set(AppConfig.ISLOGINED, "false");
+//                    AppConfig.getInstance().set(AppConfig.ISLOGINED, "false");
+                    AppConfig.getInstance().setIslogined(false);
                     message.what = 1;
                 } else {
-                    AppConfig.getInstance().set(AppConfig.ISLOGINED, "true");
+//                    AppConfig.getInstance().set(AppConfig.ISLOGINED, "true");
+                    AppConfig.getInstance().setIslogined(true);
                     message.what = 0;
                 }
                 mHandler.sendMessage(message);
                 break;
             }
             case ACCESS:
-                HtmlUtil.parseElement((String)msg);
+            {
+                ArrayList<EHentaiMangaInfo> result = HtmlDataBuilder.parseMangaList((String) msg);
+                Message message = new Message();
+                message.what = 0;
+                message.obj = result;
+                mHandler.sendMessage(message);
                 break;
+            }
+            case GDATA:
+            {
+                ApiResponse<NewsInfo> response = JsonUtil.toEHApiRes((JSONObject) msg, new TypeToken<List<EHentaiMangaInfo>>() {}.getType());
+                if(response == null) return;
+                Message message = new Message();
+                message.what = 0;
+                message.obj = response.getObj();
+                mHandler.sendMessage(message);
+                break;
+            }
             default:
                 break;
         }
@@ -160,7 +193,19 @@ public class AppActionImpl implements AppAction {
         @Override
         public void onResponse(String  t)
         {
-            System.out.println(t);
+//            int maxLogSize = 1000;
+//
+//            for(int i = 0; i <= t.length() / maxLogSize; i++) {
+//
+//                int start = i * maxLogSize;
+//
+//                int end = (i+1) * maxLogSize;
+//
+//                end = end > t.length() ? t.length() : end;
+//
+//                Log.v(mTag, t.substring(start, end));
+//
+//            }
             handlerMessage(t, mTag);
         }
     }

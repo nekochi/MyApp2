@@ -23,20 +23,19 @@ public class NekoJsonRequest extends JsonObjectRequest
 {
     public static final String TAG = "NekoJsonRequest";
 
-    private Response.Listener<JSONObject> mListener;
+//    private Response.Listener<JSONObject> mListener;
     Map<String,String> mHeader = new HashMap<String,String>();
-    Map<String,String> mParams = new HashMap<String,String>();
+//    Map<String,String> mParams = new HashMap<String,String>();
 
-    public static NekoJsonRequest create(int method, String url,Response.Listener<JSONObject> listener,Response.ErrorListener errorListener,Map<String,String> params)
+    public static NekoJsonRequest create(int method, String url,Response.Listener<JSONObject> listener,Response.ErrorListener errorListener,JSONObject params)
     {
         return new NekoJsonRequest(method,url,listener,errorListener,params);
     }
-    private NekoJsonRequest(int method, String url,Response.Listener<JSONObject> listener,Response.ErrorListener errorListener,Map<String,String> params)
+    private NekoJsonRequest(int method, String url,Response.Listener<JSONObject> listener,Response.ErrorListener errorListener,JSONObject params)
     {
-        super(method, url,null,listener,errorListener);
-        mParams = params;
-        mListener = listener;
-        
+        super(method, url,params,listener,errorListener);
+//        mParams = params;
+//        mListener = listener;
     }
 
     @Override
@@ -44,15 +43,16 @@ public class NekoJsonRequest extends JsonObjectRequest
     {
         mHeader.put(AppConfig.USERAGENT,AppConfig.getInstance().getUserAgent());
         mHeader.put(AppConfig.COOKIE,AppConfig.getInstance().getCookie());
-        mHeader.put("Connection","keep-alive");
+        mHeader.put("Content-Type", "application/json");
+        mHeader.put("Accept", "application/json");
         mHeader.put("apikey","31079c31653c3d102a92cebdda04c267");
         return mHeader;
     }
-    @Override
-    public Map<String, String> getParams() throws AuthFailureError
-    {
-        return mParams;
-    }
+//    @Override
+//    public Map<String, String> getParams() throws AuthFailureError
+//    {
+//        return mParams;
+//    }
 
     @Override
     protected Response<JSONObject> parseNetworkResponse(NetworkResponse response)
@@ -76,9 +76,9 @@ public class NekoJsonRequest extends JsonObjectRequest
         }
     }
 
-    @Override
-    protected void deliverResponse(JSONObject jsonObject)
-    {
-        mListener.onResponse(jsonObject);
-    }
+//    @Override
+//    protected void deliverResponse(JSONObject jsonObject)
+//    {
+//        mListener.onResponse(jsonObject);
+//    }
 }

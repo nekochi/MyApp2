@@ -16,6 +16,7 @@
 
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="quit">Quit</string>
 
     <string name="textview_news">News</string>
     <!-- Strings related to login -->
@@ -34,8 +35,6 @@
     <!-- Strings related to MangaInfoActivity -->
     <string name="title_activity_mangaInfo">MangaInfo</string>
 
-    <!-- Strings related to SettingsActivity -->
-    <string name="title_activity_setting">Setting</string>
 
     <!-- Strings related to MangaReader -->
     <string name="title_activity_mangaReader">MangaReader</string>
@@ -52,6 +51,7 @@
     <string name="title_activity_newinfoweb">NewsInfo</string>
 
     <!-- Strings related to Settings -->
+    <string name="title_activity_setting">Settings</string>
     <string name="setting_category_default">Default</string>
     <string name="setting_preference_cleanCache">Clean Cache</string>
 </resources>

@@ -50,7 +50,7 @@ abstract public class BaseActivity extends AppCompatActivity
 
         public UiHandler(BaseActivity activity)
         {
-            mActivity = new WeakReference<BaseActivity>(activity);
+            mActivity = new WeakReference<>(activity);
         }
 
         @Override

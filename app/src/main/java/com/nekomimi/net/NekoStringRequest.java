@@ -9,7 +9,6 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.nekomimi.base.AppConfig;
-import com.nekomimi.bean.ResponseHeader;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -21,7 +20,7 @@ import java.util.Map;
 public class NekoStringRequest extends StringRequest
 {
     private static final String COOKIE = "Cookie";
-    private ResponseHeader mResponseHeader;
+
     Map<String,String> mHeader = new HashMap<>();
     Map<String,String> mParams = new HashMap<>();
 

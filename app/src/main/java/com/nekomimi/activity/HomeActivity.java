@@ -1,5 +1,6 @@
 package com.nekomimi.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -11,8 +12,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -32,7 +33,8 @@ import com.nekomimi.service.NetService;
 import java.util.ArrayList;
 
 
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseActivity implements View.OnClickListener
+{
 
 	private static final String TAG = "HomeActivity";
 
@@ -45,6 +47,7 @@ public class HomeActivity extends BaseActivity {
 	private Button mTestBt;
 	private ImageView mFaceIv;
 	private Button mSettingBt;
+	private Button mQuitBt;
 
 	private boolean mFlag = false;
 	private boolean mIfQuit = false;
@@ -105,7 +108,7 @@ public class HomeActivity extends BaseActivity {
 		mNavTab.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 			@Override
 			public boolean onNavigationItemSelected(MenuItem menuItem) {
-				Toast.makeText(getContext(),menuItem.getTitle(),Toast.LENGTH_SHORT).show();
+				Toast.makeText(getContext(), menuItem.getTitle(), Toast.LENGTH_SHORT).show();
 				switch (menuItem.getItemId()) {
 
 					default:
@@ -116,16 +119,10 @@ public class HomeActivity extends BaseActivity {
 		});
 		mFaceIv = (ImageView)findViewById(R.id.iv_face);
 		mSettingBt = (Button)findViewById(R.id.drawer_setting);
-		mSettingBt.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (v.getId() == R.id.drawer_setting)
-				{
-					Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
-					startActivity(intent);
-				}
-			}
-		});
+		mSettingBt.setOnClickListener(this);
+		mQuitBt = (Button)findViewById(R.id.drawer_quit);
+		mQuitBt.setOnClickListener(this);
+
 
 		//mTopTab = (TopTabView)findViewById(R.id.toptab);
 		mViewPager = (ViewPager)findViewById(R.id.vp_pager);
@@ -141,14 +138,14 @@ public class HomeActivity extends BaseActivity {
 		}
 
 
-		mTestBt.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				final MyFragmentPagerAdapter adapter = (MyFragmentPagerAdapter)mViewPager.getAdapter();
-				((HomeFragment)adapter.getItem(0)).scrollToTop();
-				Log.e(TAG,mViewPager.getHeight()+"");
-			}
-		});
+//		mTestBt.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View view) {
+//				final MyFragmentPagerAdapter adapter = (MyFragmentPagerAdapter)mViewPager.getAdapter();
+//				((HomeFragment)adapter.getItem(0)).scrollToTop();
+//				Log.e(TAG,mViewPager.getHeight()+"");
+//			}
+//		});
 	}
 
 	private void initViewpager()
@@ -238,4 +235,34 @@ public class HomeActivity extends BaseActivity {
 	}
 
 
+	@Override
+	public void onClick(View v)
+	{
+		switch (v.getId())
+		{
+			case R.id.drawer_setting:
+				Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
+				startActivity(intent);
+				break;
+			case R.id.drawer_quit:
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle("Really???").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+						finish();
+					}
+				}).setNegativeButton("No!", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+				builder.create().show();
+				break;
+			default:
+				break;
+		}
+
+	}
 }

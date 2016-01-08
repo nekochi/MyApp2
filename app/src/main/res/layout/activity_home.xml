@@ -70,11 +70,11 @@
             <Button
                 android:id="@+id/drawer_setting"
                 style="@style/nav_footer_button"
-                android:text="setting"/>
+                android:text="@string/title_activity_setting"/>
             <Button
-
+                android:id="@+id/drawer_quit"
                 style="@style/nav_footer_button"
-                android:text="Quit"/>
+                android:text="@string/quit"/>
         </LinearLayout>
     </android.support.design.widget.NavigationView>
 

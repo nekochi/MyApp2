@@ -80,8 +80,16 @@ public class InitActivity extends AppCompatActivity {
             Log.d("TAG","density:"+density);
             AppConfig.mScanWidth = (int)width;
             AppConfig.mScanHeight = (int)height;
-            Intent intent = new Intent(InitActivity.this,LoginActivity.class);
-            startActivity(intent);
+            if(mAppConfig.getIsLogined())
+            {
+                Intent intent = new Intent(InitActivity.this,HomeActivity.class);
+                startActivity(intent);
+            }
+            else
+            {
+                Intent intent = new Intent(InitActivity.this,LoginActivity.class);
+                startActivity(intent);
+            }
             finish();
         }
     }

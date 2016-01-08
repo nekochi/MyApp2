@@ -1,5 +1,7 @@
 package com.nekomimi.util;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.nekomimi.api.ApiResponse;
 import com.nekomimi.bean.MangaChapterInfo;
@@ -93,9 +95,10 @@ public class JsonUtil {
 
     public  static  ApiResponse toApiRes(JSONObject object,Type type)
     {
-        String event = "";
-        String msg = "";
-        String obj = "";
+
+        String event;
+        String msg;
+        String obj;
         try {
             event = object.getString("showapi_res_code");
             msg = object.getString("showapi_res_error");
@@ -108,6 +111,29 @@ public class JsonUtil {
             return response;
         }catch (JSONException e)
         {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public  static  ApiResponse toEHApiRes(JSONObject object,Type type)
+    {
+
+        String event;
+        String msg;
+        String obj;
+        try {
+            event = "0";//object.getString("showapi_res_code");
+            msg = "";//object.getString("showapi_res_error");
+            obj = object.getJSONArray("gmetadata").toString();
+            Log.e("OBJ", obj);
+            Gson gson = new Gson();
+            ApiResponse response = new ApiResponse();
+            response.setEvent(event);
+            response.setMsg(msg);
+//            List<EHentaiMangaInfo> list = gson.fromJson(obj,type);
+            response.setObj(gson.fromJson(obj,type));
+            return response;
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return null;

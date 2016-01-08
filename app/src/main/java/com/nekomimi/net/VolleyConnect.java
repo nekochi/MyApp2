@@ -64,12 +64,13 @@ public class VolleyConnect
         jsonRequest(GET, params, url, listener, errorListener, null);
     }
     public void postJsonRequest(Map<String,String> params ,String url,Response.Listener<JSONObject> listener
-            ,Response.ErrorListener errorListener,Map<String,String> datas)
+            ,Response.ErrorListener errorListener,JSONObject datas)
     {
+        Log.e("DATAs",datas.toString());
         jsonRequest(POST, params, url, listener, errorListener, datas);
     }
     public void jsonRequest(int method,Map<String,String> params ,String url,Response.Listener<JSONObject> listener
-            ,Response.ErrorListener errorListener,Map<String,String> datas)
+            ,Response.ErrorListener errorListener,JSONObject datas)
     {
         NekoJsonRequest jr = NekoJsonRequest.create(method,makeHtml(url, params, "UTF-8"),listener,errorListener,datas);
         mRequestQueue.add(jr);

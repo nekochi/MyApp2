@@ -5,13 +5,17 @@ import android.widget.ImageView;
 
 import com.android.volley.Response;
 import com.nekomimi.base.AppActionImpl;
+import com.nekomimi.bean.EHentaiMangaInfo;
 import com.nekomimi.net.VolleyConnect;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,6 +27,8 @@ public class ApiImpl implements Api
     private VolleyConnect mVolleyConnect;
 
     private static final String HOST = "http://exhentai.org/";
+    private static final String API_HOST = "http://exhentai.org/api.php";
+//    private static final String HOST = "http://exhentai.org/g/890226/60843bdee2/";
 
     public ApiImpl()
     {
@@ -56,6 +62,27 @@ public class ApiImpl implements Api
         }
         Log.e("access",sb.toString());
          mVolleyConnect.getStringRequest(null,sb.toString(),listener,errorListener);
+    }
+
+    @Override
+    public void gdata(List<EHentaiMangaInfo> list, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener)
+    {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("method","gdata");
+            JSONArray gidlist = new JSONArray();
+            for(int i = 0; i < list.size() ; i++)
+            {
+                JSONArray item = new JSONArray();
+                item.put(0,Integer.valueOf(list.get(i).gid));
+                item.put(1,list.get(i).token);
+                gidlist.put(item);
+            }
+            object.put("gidlist",gidlist);
+            mVolleyConnect.postJsonRequest(null,API_HOST,listener,errorListener,object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -1,16 +1,13 @@
 package com.nekomimi.activity;
 
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.preference.DialogPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -61,7 +58,7 @@ public class SettingsActivity extends AppCompatActivity {
             findPreference("cleanCache").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    Log.e(TAG, "onPreferenceClick");
+//                    Log.e(TAG, "onPreferenceClick");
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("Really???").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
@@ -84,8 +81,7 @@ public class SettingsActivity extends AppCompatActivity {
                             dialog.dismiss();
                         }
                     });
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
+                    builder.create().show();
                     return false;
                 }
             });
@@ -93,16 +89,16 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
 
-    public class NumberPickerPreference extends DialogPreference {
-        public NumberPickerPreference(Context context, AttributeSet attrs) {
-            super(context, attrs);
-
-            //setDialogLayoutResource(R.layout.numberpicker_dialog);
-            setPositiveButtonText(android.R.string.ok);
-            setNegativeButtonText(android.R.string.cancel);
-
-            setDialogIcon(null);
-        }
-
-    }
+//    public class NumberPickerPreference extends DialogPreference {
+//        public NumberPickerPreference(Context context, AttributeSet attrs) {
+//            super(context, attrs);
+//
+//            //setDialogLayoutResource(R.layout.numberpicker_dialog);
+//            setPositiveButtonText(android.R.string.ok);
+//            setNegativeButtonText(android.R.string.cancel);
+//
+//            setDialogIcon(null);
+//        }
+//
+//    }
 }
