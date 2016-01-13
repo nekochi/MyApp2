@@ -21,7 +21,7 @@ import com.nekomimi.adapter_listener.RecyclerScorllListener;
 import com.nekomimi.base.AppConfig;
 import com.nekomimi.base.NekoApplication;
 import com.nekomimi.bean.EHentaiMangaInfo;
-import com.nekomimi.bean.HtmlDataBuilder;
+import com.nekomimi.bean.MangaDataBuilder;
 import com.nekomimi.bean.MangaInfo;
 import com.nekomimi.net.VolleyConnect;
 import com.nekomimi.util.JsonUtil;
@@ -91,7 +91,8 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 //        request.put("finish","");
 //        request.put("key", "e00b1e6d896c4f57ae552ab257186680");
 //        Util.showProgress(true, mRecycleView, mProgressView);
-        HtmlDataBuilder.getMangaList(mHandle,this.getContext());
+        MangaDataBuilder mb = MangaDataBuilder.getInstance(this.getContext());
+        mb.getMangaList(mHandle,this.getContext());
        // VolleyConnect.getInstance().connect(NekoJsonRequest.create(Util.makeHtml(AppConfig.MANGA_URL, request, "UTF-8"), mHandle));
     }
 	 @Override
@@ -271,7 +272,7 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                     ((MangaItemHolder) holder).mData = mEDataList.get(position);
                     ((MangaItemHolder) holder).mType_Tv.setText(mEDataList.get(position).category);
                     ((MangaItemHolder) holder).mTitle_Tv.setText(mEDataList.get(position).title);
-                    ((MangaItemHolder) holder).mArea_Tv.setText(mEDataList.get(position).rating);
+                    ((MangaItemHolder) holder).mArea_Tv.setText(String.valueOf(mEDataList.get(position).rating));
                     VolleyConnect.getInstance().getImg(mEDataList.get(position).thumb, ((MangaItemHolder) holder).mFace_Iv, null, mImgHeight, mImgWidth);
                 }
 

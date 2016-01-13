@@ -14,7 +14,7 @@ import com.nekomimi.api.Api;
 import com.nekomimi.api.ApiImpl;
 import com.nekomimi.api.ApiResponse;
 import com.nekomimi.bean.EHentaiMangaInfo;
-import com.nekomimi.bean.HtmlDataBuilder;
+import com.nekomimi.bean.MangaDataBuilder;
 import com.nekomimi.bean.NewsInfo;
 import com.nekomimi.net.VolleyConnect;
 import com.nekomimi.util.JsonUtil;
@@ -43,6 +43,12 @@ public class AppActionImpl implements AppAction {
     private static final String GETMANGALIST = "GetMangaList";
     private static final String NEWSLIST = "NewsList";
     private static final String GDATA = "Gdata";
+
+    public static final int CODE_LOGIN = 100000;
+    public static final int CODE_ACCESS = 100001;
+    public static final int CODE_GETMANGALIST = 100002;
+    public static final int CODE_NEWSLIST = 100003;
+    public static final int CODE_GDATA = 100004;
 
     public AppActionImpl(Context context)
     {
@@ -146,9 +152,12 @@ public class AppActionImpl implements AppAction {
             }
             case ACCESS:
             {
-                ArrayList<EHentaiMangaInfo> result = HtmlDataBuilder.parseMangaList((String) msg);
+//                ArrayList<EHentaiMangaInfo> result = MangaDataBuilder.parseMangaList((String) msg);
+                MangaDataBuilder mangaDataBuilder = MangaDataBuilder.getInstance(mContext);
+                ArrayList<EHentaiMangaInfo> result = mangaDataBuilder.parseMangaList((String) msg);
                 Message message = new Message();
                 message.what = 0;
+                message.arg1 = CODE_ACCESS;
                 message.obj = result;
                 mHandler.sendMessage(message);
                 break;
@@ -159,6 +168,7 @@ public class AppActionImpl implements AppAction {
                 if(response == null) return;
                 Message message = new Message();
                 message.what = 0;
+                message.arg1 = CODE_GDATA;
                 message.obj = response.getObj();
                 mHandler.sendMessage(message);
                 break;

@@ -6,11 +6,11 @@ import android.provider.BaseColumns;
  * Created by hongchi on 2016-1-8.
  * File description :
  */
-public final class FeedReaderContract
+public final class MangaReaderContract
 {
-    public FeedReaderContract(){}
+    public MangaReaderContract(){}
 
-    public static abstract class FeedGallery implements BaseColumns
+    public static abstract class MangaGallery implements BaseColumns
     {
         public static final String TABLE_NAME = "gallery";
         public static final String COLUMN_NAME_GALLERY_ID = "gid";
@@ -25,5 +25,8 @@ public final class FeedReaderContract
         public static final String COLUMN_NAME_FILE_SIZE = "file_size";
         public static final String COLUMN_NAME_EXPUNGED = "expunged";
         public static final String COLUMN_NAME_RATING = "rating";
+        public static final String COLUMN_NAME_TAGS = "tags";
+
+        public static final String COLUMN_NAME_NULLABLE = "null";
     }
 }

@@ -16,10 +16,10 @@ public class EHentaiMangaInfo
     public String  thumb;
     public String  uploader;
     public String  posted;
-    public String  filecount;
-    public String filesize;
+    public int  filecount;
+    public int filesize;
     public boolean expunged;
-    public String  rating;
+    public double  rating;
     public String torrentcount;
     public String tags[];
 
@@ -27,6 +27,9 @@ public class EHentaiMangaInfo
     public EHentaiMangaInfo(String Url)
     {
         this.mUrl = Url;
+    }
+    public EHentaiMangaInfo()
+    {
     }
 }
 
